@@ -144,9 +144,10 @@ Unit(),
 lootForPickPocketed(false), lootForBody(false), m_lootMoney(0), m_lootRecipient(0),
 m_deathTimer(0), m_respawnTime(0), m_respawnDelay(25), m_corpseDelay(60), m_respawnradius(0.0f),
 m_gossipOptionLoaded(false), m_emoteState(0), m_isPet(false), m_isTotem(false), m_reactState(REACT_AGGRESSIVE),
-m_regenTimer(2000), m_defaultMovementType(IDLE_MOTION_TYPE), m_equipmentId(0),
-m_AlreadyCallAssistance(false), m_regenHealth(true), m_AI_locked(false), m_isDeadByDefault(false),
+m_regenTimer(2000), m_defaultMovementType(IDLE_MOTION_TYPE), m_equipmentId(0), m_AlreadyCallAssistance(false),
+m_regenHealth(true), m_AI_locked(false), m_isDeadByDefault(false),
 m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL),m_creatureInfo(NULL), m_DBTableGuid(0), m_formation(NULL), m_PlayerDamageReq(0)
+, m_AlreadySearchedAssistance(false)
 {
     m_valuesCount = UNIT_END;
 
@@ -533,10 +534,8 @@ void Creature::Update(uint32 diff)
             break;
         }
         case DEAD_FALLING:
-        {
-            if (!FallGround())
-                setDeathState(JUST_DIED);
-        }
+            GetMotionMaster()->UpdateMotion(diff);
+            break;
         default:
             break;
     }
@@ -1626,6 +1625,12 @@ void Creature::setDeathState(DeathState s)
         if(sWorld.getConfig(CONFIG_SAVE_RESPAWN_TIME_IMMEDIATELY) || isWorldBoss())
             SaveRespawnTime();
 
+        SetNoSearchAssistance(false);
+
+        //Dismiss group if is leader
+        if(m_formation && m_formation->getLeader() == this)
+            m_formation->FormationReset(true);
+
         if (canFly() && FallGround())
             return;
     }
@@ -1678,9 +1683,8 @@ bool Creature::FallGround()
     if (fabs(ground_Z - z) < 0.1f)
         return false;
 
+    GetMotionMaster()->MoveFall(ground_Z, EVENT_FALL_GROUND);
     Unit::setDeathState(DEAD_FALLING);
-    GetMotionMaster()->MovePoint(0, x, y, ground_Z);
-    Relocate(x, y, ground_Z);
     return true;
 }
 
@@ -1881,20 +1885,38 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
     return false;
 }
 
-void Creature::DoFleeToGetAssistance(float radius) // Optional parameter
+void Creature::DoFleeToGetAssistance()
 {
     if (!getVictim())
         return;
 
-    Creature* pCreature = NULL;
-    Trinity::NearestAssistCreatureInCreatureRangeCheck u_check(this,getVictim(),radius);
-    Trinity::CreatureLastSearcher<Trinity::NearestAssistCreatureInCreatureRangeCheck> searcher(pCreature, u_check);
-    VisitNearbyGridObject(radius, searcher);
+    if(HasAuraType(SPELL_AURA_PREVENTS_FLEEING))
+        return;
+    
+    float radius = sWorld.getConfig(CONFIG_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
+    if (radius >0)
+    {
+        Creature* pCreature = NULL;
 
-    if(!pCreature)
-        SetControlled(true, UNIT_STAT_FLEEING);
-    else
-        GetMotionMaster()->MovePoint(0,pCreature->GetPositionX(),pCreature->GetPositionY(),pCreature->GetPositionZ());
+        CellPair p(Trinity::ComputeCellPair(GetPositionX(), GetPositionY()));
+        Cell cell(p);
+        cell.data.Part.reserved = ALL_DISTRICT;
+        cell.SetNoCreate();
+        Trinity::NearestAssistCreatureInCreatureRangeCheck u_check(this, getVictim(), radius);
+        Trinity::CreatureLastSearcher<Trinity::NearestAssistCreatureInCreatureRangeCheck> searcher(pCreature, u_check);
+
+        TypeContainerVisitor<Trinity::CreatureLastSearcher<Trinity::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
+
+        CellLock<GridReadGuard> cell_lock(cell, p);
+        cell_lock->Visit(cell_lock, grid_creature_searcher, *GetMap(), *this, radius);
+
+        SetNoSearchAssistance(true);
+        if(!pCreature)
+            SetControlled(true, UNIT_STAT_FLEEING);
+        else
+            GetMotionMaster()->MoveSeekAssistance(pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ());
+    }
+
 }
 
 Unit* Creature::SelectNearestTarget(float dist) const

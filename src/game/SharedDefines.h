@@ -2070,6 +2070,13 @@ enum SummonType
     SUMMON_TYPE_POSESSED2   = 428
 };
 
+enum EventId
+{
+    EVENT_SPELLCLICK        = 1001,
+    EVENT_FALL_GROUND       = 1002,
+    EVENT_CHARGE            = 1003,
+};
+
 enum ResponseCodes
 {
     RESPONSE_SUCCESS                                       = 0x00,

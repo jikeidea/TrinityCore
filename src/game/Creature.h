@@ -596,8 +596,11 @@ class TRINITY_DLL_SPEC Creature : public Unit
         void CallAssistance();
         void CallForHelp(float fRadius);
         void SetNoCallAssistance(bool val) { m_AlreadyCallAssistance = val; }
+        void SetNoSearchAssistance(bool val) { m_AlreadySearchedAssistance = val; }
+        bool HasSearchedAssistance() { return m_AlreadySearchedAssistance; }
+
         bool CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction = true) const;
-        void DoFleeToGetAssistance(float radius = 50);
+        void DoFleeToGetAssistance();
 
         MovementGeneratorType GetDefaultMovementType() const { return m_defaultMovementType; }
         void SetDefaultMovementType(MovementGeneratorType mgt) { m_defaultMovementType = mgt; }
@@ -711,6 +714,7 @@ class TRINITY_DLL_SPEC Creature : public Unit
         uint32 m_equipmentId;
 
         bool m_AlreadyCallAssistance;
+        bool m_AlreadySearchedAssistance;
         bool m_regenHealth;
         bool m_AI_locked;
         bool m_isDeadByDefault;
