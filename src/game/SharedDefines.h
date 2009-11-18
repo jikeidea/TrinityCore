@@ -237,7 +237,7 @@ enum SpellCategory
 #define SPELL_ATTR_STOP_ATTACK_TARGET             0x00100000            // 20 Stop attack after use this spell (and not begin attack if use)
 #define SPELL_ATTR_IMPOSSIBLE_DODGE_PARRY_BLOCK   0x00200000            // 21 Cannot be dodged/parried/blocked
 #define SPELL_ATTR_UNK22                          0x00400000            // 22 shoot spells
-#define SPELL_ATTR_UNK23                          0x00800000            // 23 castable while dead?
+#define SPELL_ATTR_CASTABLE_WHILE_DEAD            0x00800000            // 23 castable while dead?
 #define SPELL_ATTR_CASTABLE_WHILE_MOUNTED         0x01000000            // 24 castable while mounted
 #define SPELL_ATTR_DISABLED_WHILE_ACTIVE          0x02000000            // 25 Activate and start cooldown after aura fade or remove summoned creature or go
 #define SPELL_ATTR_UNK26                          0x04000000            // 26 Aura ignore immune?
@@ -1980,6 +1980,9 @@ enum PetDiet
 };
 
 #define MAX_PET_DIET 9
+
+#define PET_FOLLOW_DIST  1
+#define PET_FOLLOW_ANGLE (M_PI/2)
 
 #define CHAIN_SPELL_JUMP_RADIUS 10
 
