@@ -15,8 +15,6 @@ SET(trinityscript_LIB_SRCS
    scripts/boss/boss_lethon.cpp
    scripts/boss/boss_taerar.cpp
    scripts/boss/boss_ysondre.cpp
-   scripts/creature/mob_event_ai.cpp
-   scripts/creature/mob_event_ai.h
    scripts/creature/mob_generic_creature.cpp
    scripts/creature/simple_ai.cpp
    scripts/creature/simple_ai.h
@@ -387,7 +385,10 @@ SET(trinityscript_LIB_SRCS
    scripts/zone/zulgurub/boss_wushoolay.cpp
    scripts/zone/zulgurub/def_zulgurub.h
    scripts/zone/zulgurub/instance_zulgurub.cpp
-   system.cpp
+   system/ScriptLoader.cpp
+   system/ScriptLoader.h
+   system/system.cpp
+   system/system.h
 )
 
 add_library(trinityscript SHARED ${trinityscript_LIB_SRCS})
