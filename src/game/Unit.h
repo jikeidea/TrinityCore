@@ -1481,6 +1481,7 @@ class TRINITY_DLL_SPEC Unit : public WorldObject
         }
         uint32 GetReducedThreatPercent() { return m_reducedThreatPercent; }
         Unit *GetMisdirectionTarget() { return m_misdirectionTargetGUID ? GetUnit(*this, m_misdirectionTargetGUID) : NULL; }
+        virtual float GetFollowAngle() const { return PET_FOLLOW_ANGLE; }
 
         bool IsAIEnabled, NeedChangeAI;
     protected:

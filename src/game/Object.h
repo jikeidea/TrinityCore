@@ -95,6 +95,7 @@ class Player;
 class UpdateMask;
 class InstanceData;
 class GameObject;
+class CreatureAI;
 
 typedef UNORDERED_MAP<Player*, UpdateData> UpdateDataMapType;
 
