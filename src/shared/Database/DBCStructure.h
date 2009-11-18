@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2005-2008 MaNGOS <http://www.mangosproject.org/>
+ * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
- * Copyright (C) 2008 Trinity <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2009 Trinity <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,6 +210,17 @@ struct DurabilityQualityEntry
 {
     uint32    Id;                                           // 0
     float     quality_mod;                                  // 1
+};
+
+struct EmotesEntry
+{
+    uint32  Id;                                             // 0
+    //char*   Name;                                         // 1, internal name
+    //uint32  AnimationId;                                  // 2, ref to animationData
+    uint32  Flags;                                          // 3, bitmask, may be unit_flags
+    uint32  EmoteType;                                      // 4, Can be 0, 1 or 2 (determine how emote are shown)
+    uint32  UnitStandState;                                 // 5, uncomfirmed, may be enum UnitStandStateType
+    //uint32  SoundId;                                      // 6, ref to soundEntries
 };
 
 struct EmotesTextEntry
@@ -688,8 +699,8 @@ struct SpellThreatEntry
 struct SpellRadiusEntry
 {
     uint32    ID;
-    float     Radius;
-    float     Radius2;
+    float     radiusHostile;
+    float     radiusFriend;
 };
 
 struct SpellRangeEntry
