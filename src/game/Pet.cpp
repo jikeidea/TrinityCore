@@ -119,6 +119,16 @@ void Pet::AddToWorld()
         ObjectAccessor::Instance().AddObject(this);
         Unit::AddToWorld();
     }
+
+    // Prevent stuck pets when zoning. Pets default to "follow" when added to world
+    // so we'll reset flags and let the AI handle things
+    if (this->GetCharmInfo() && this->GetCharmInfo()->HasCommandState(COMMAND_FOLLOW))
+    {
+        this->GetCharmInfo()->SetIsCommandAttack(false);
+        this->GetCharmInfo()->SetIsAtStay(false);
+        this->GetCharmInfo()->SetIsFollowing(false);
+        this->GetCharmInfo()->SetIsReturning(false);
+     }
 }
 
 void Pet::RemoveFromWorld()
@@ -386,6 +396,7 @@ bool Pet::LoadPetFromDB( Unit* owner, uint32 petentry, uint32 petnumber, bool cu
         }
     }
 
+    //SynchronizeLevelWithOwner();
     return true;
 }
 
@@ -1852,5 +1863,31 @@ void Pet::CastPetAura(PetAura const* aura)
     }
     else
         CastSpell(this, auraId, true);
+}
+
+void Pet::SynchronizeLevelWithOwner()
+{
+    Unit* owner = GetOwner();
+    if (!owner || owner->GetTypeId() != TYPEID_PLAYER)
+        return;
+
+    switch(getPetType())
+    {
+        // always same level
+        case SUMMON_PET:
+            SetLevel(owner->getLevel());
+            break;
+        // can't be greater owner level
+        case HUNTER_PET:
+            if(getLevel() > owner->getLevel())
+            {
+                SetLevel(owner->getLevel());
+                SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, uint32((Trinity::XP::xp_to_level(owner->getLevel()))/4));
+                SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, GetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP)-1);
+            }
+            break;
+        default:
+            break;
+    }
 }
 

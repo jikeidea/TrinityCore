@@ -1108,15 +1108,11 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
     if( !m_caster->IsFriendlyTo(unit) && !IsPositiveSpell(m_spellInfo->Id))
     {
-        if( !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO) )
-        {
-            m_caster->CombatStart(unit);
-        }
-        else if(m_customAttr & SPELL_ATTR_CU_AURA_CC)
-        {
+        m_caster->CombatStart(unit, !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO));
+
+        if(m_customAttr & SPELL_ATTR_CU_AURA_CC)
             if(!unit->IsStandState())
                 unit->SetStandState(PLAYER_STATE_NONE);
-        }
     }
 
     // if target is flagged for pvp also flag caster if a player
@@ -1190,7 +1186,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, const uint32 effectMask)
             }
             if( unit->isInCombat() && !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO) )
             {
-                m_caster->SetInCombatState(unit->GetCombatTimer() > 0);
+                m_caster->SetInCombatState(unit->GetCombatTimer() > 0, unit);
                 unit->getHostilRefManager().threatAssist(m_caster, 0.0f);
             }
         }

@@ -8934,7 +8934,7 @@ void Unit::SetInCombatWith(Unit* enemy)
     Unit* eOwner = enemy->GetCharmerOrOwnerOrSelf();
     if(eOwner->IsPvP())
     {
-        SetInCombatState(true);
+        SetInCombatState(true, enemy);
         return;
     }
 
@@ -8944,31 +8944,33 @@ void Unit::SetInCombatWith(Unit* enemy)
         Unit const* myOwner = GetCharmerOrOwnerOrSelf();
         if(((Player const*)eOwner)->duel->opponent == myOwner)
         {
-            SetInCombatState(true);
+            SetInCombatState(true, enemy);
             return;
         }
     }
-    SetInCombatState(false);
+    SetInCombatState(false, enemy);
 }
 
-void Unit::CombatStart(Unit* target)
+void Unit::CombatStart(Unit* target, bool initialAggro)
 {
-    if(!target->IsStandState()/* && !target->hasUnitState(UNIT_STAT_STUNNED)*/)
-        target->SetStandState(PLAYER_STATE_NONE);
-
-    if(!target->isInCombat() && target->GetTypeId() != TYPEID_PLAYER
-        && !((Creature*)target)->HasReactState(REACT_PASSIVE) && ((Creature*)target)->IsAIEnabled)
+    if (initialAggro)
     {
-        ((Creature*)target)->AI()->AttackStart(this);
-        if(((Creature*)target)->GetFormation())
-        {   
-            ((Creature*)target)->GetFormation()->MemberAttackStart((Creature*)target, this);
-            sLog.outDebug("Unit::CombatStart() calls CreatureGroups::MemberHasAttacked(this);");
-        }
-    }
+        if(!target->IsStandState()/* && !target->hasUnitState(UNIT_STAT_STUNNED)*/)
+            target->SetStandState(PLAYER_STATE_NONE);
 
-    SetInCombatWith(target);
-    target->SetInCombatWith(this);
+        if(!target->isInCombat() && target->GetTypeId() != TYPEID_PLAYER
+            && !((Creature*)target)->HasReactState(REACT_PASSIVE) && ((Creature*)target)->IsAIEnabled)
+        {
+            ((Creature*)target)->AI()->AttackStart(this);
+            if(((Creature*)target)->GetFormation())
+            {   
+                ((Creature*)target)->GetFormation()->MemberAttackStart((Creature*)target, this);
+                sLog.outDebug("Unit::CombatStart() calls CreatureGroups::MemberHasAttacked(this);");
+            }
+        }
+        SetInCombatWith(target);
+        target->SetInCombatWith(this);
+    }
 
     Unit *who = target->GetCharmerOrOwnerOrSelf();
     if(who->GetTypeId() == TYPEID_PLAYER)
@@ -8985,7 +8987,7 @@ void Unit::CombatStart(Unit* target)
 
 }
 
-void Unit::SetInCombatState(bool PvP)
+void Unit::SetInCombatState(bool PvP, Unit* enemy)
 {
     // only alive units can be in combat
     if(!isAlive())
@@ -8994,24 +8996,33 @@ void Unit::SetInCombatState(bool PvP)
     if(PvP)
         m_CombatTimer = 5000;
 
-    if(isInCombat())
-        return;
+    //if(isInCombat())
+    //    return;
+    
+    bool creatureNotInCombat = GetTypeId()==TYPEID_UNIT && !HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
 
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
 
     if(GetTypeId() != TYPEID_PLAYER && GetMotionMaster()->GetMotionSlotType(MOTION_SLOT_IDLE) != IDLE_MOTION_TYPE)
         ((Creature*)this)->SetHomePosition(GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
 
+    if (creatureNotInCombat)
+    {
+        RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
+        if(enemy && ((Creature*)this)->AI())
+            ((Creature*)this)->AI()->EnterCombat(enemy);
+    }
+    
     if(GetTypeId() != TYPEID_PLAYER && ((Creature*)this)->isPet())
     {
         UpdateSpeed(MOVE_RUN, true);
         UpdateSpeed(MOVE_SWIM, true);
         UpdateSpeed(MOVE_FLIGHT, true);
-    }
-    else if(!isCharmed())
+    }else if(!isCharmed())
         return;
-
+    
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT);
+    
 }
 
 void Unit::ClearInCombat()
@@ -9021,7 +9032,13 @@ void Unit::ClearInCombat()
 
     // Player's state will be cleared in Player::UpdateContestedPvP
     if(GetTypeId()!=TYPEID_PLAYER)
+    {
+        Creature* creature = (Creature*)this;
+        if (creature->GetCreatureInfo() && creature->GetCreatureInfo()->unit_flags & UNIT_FLAG_NOT_ATTACKABLE_2)
+            SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
+                             
         clearUnitState(UNIT_STAT_ATTACK_PLAYER);
+    }
 
     if(GetTypeId() != TYPEID_PLAYER && ((Creature*)this)->isPet())
     {
@@ -9030,10 +9047,9 @@ void Unit::ClearInCombat()
             for(int i = 0; i < MAX_MOVE_TYPE; ++i)
                 SetSpeed(UnitMoveType(i), owner->GetSpeedRate(UnitMoveType(i)), true);
         }
-    }
-    else if(!isCharmed())
+    }else if(!isCharmed())
         return;
-
+    
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_IN_COMBAT);
 }
 
