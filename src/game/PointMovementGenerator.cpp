@@ -82,9 +82,7 @@ template <> void PointMovementGenerator<Creature>::MovementInform(Creature &unit
     if(id == EVENT_FALL_GROUND)
     {
         unit.setDeathState(JUST_DIED);
-        //TODO: SKY FIX TEMP!!!
         unit.SetFlying(true);
-        //unit.AddUnitMovementFlag(MOVEMENTFLAG_FLYING2);
     }
     unit.AI()->MovementInform(POINT_MOTION_TYPE, id);
 }

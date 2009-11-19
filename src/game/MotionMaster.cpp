@@ -367,9 +367,7 @@ MotionMaster::MoveCharge(float x, float y, float z, float speed, uint32 id)
 
 void MotionMaster::MoveFall(float z, uint32 id)
 {
-    //TODO: SKY FIX TEMP!!!
     i_owner->SetFlying(false);
-    //i_owner->RemoveUnitMovementFlag(MOVEMENTFLAG_FLYING2);
     i_owner->SendMovementFlagUpdate();
     //AddUnitMovementFlag(MOVEMENTFLAG_FALLING);
     MoveCharge(i_owner->GetPositionX(), i_owner->GetPositionY(), z, SPEED_CHARGE, id);
