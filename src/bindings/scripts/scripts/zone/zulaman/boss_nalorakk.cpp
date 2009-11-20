@@ -406,7 +406,7 @@ struct TRINITY_DLL_DECL boss_nalorakkAI : public ScriptedAI
             {
                 DoYell(YELL_SURGE, LANG_UNIVERSAL, NULL);
                 DoPlaySoundToSet(m_creature, SOUND_YELL_SURGE);
-                Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 1, GetSpellMaxRange(SPELL_SURGE), true);
+                Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 1, 45, true);
                 if(target)
                     DoCast(target, SPELL_SURGE);
                 Surge_Timer = 15000 + rand()%5000;
