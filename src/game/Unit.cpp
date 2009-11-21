@@ -7772,10 +7772,7 @@ uint32 Unit::SpellDamageBonus(Unit *pVictim, SpellEntry const *spellProto, uint3
     for(AuraList::const_iterator i = mModDamagePercentDone.begin(); i != mModDamagePercentDone.end(); ++i)
     {
         if( ((*i)->GetModifier()->m_miscvalue & GetSpellSchoolMask(spellProto)) &&
-            (*i)->GetSpellProto()->EquippedItemClass == -1 &&
-                                                            // -1 == any item class (not wand then)
-            (*i)->GetSpellProto()->EquippedItemInventoryTypeMask == 0 )
-                                                            // 0 == any inventory type (not wand then)
+            (GetTypeId() != TYPEID_PLAYER || ((Player*)this)->HasItemFitToSpellReqirements((*i)->GetSpellProto())))
         {
             DoneTotalMod *= ((*i)->GetModifierValue() +100.0f)/100.0f;
         }
