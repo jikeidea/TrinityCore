@@ -38,17 +38,13 @@ namespace FactorySelector
         const CreatureAICreator *ai_factory = NULL;
         CreatureAIRegistry &ai_registry(CreatureAIRepository::Instance());
 
-        if(creature->isPet())
-            ai_factory = ai_registry.GetRegistryItem("PetAI");
-
         //scriptname in db
-        if(!ai_factory)
-            if(CreatureAI* scriptedAI = Script->GetAI(creature))
-                return scriptedAI;
+        if(CreatureAI* scriptedAI = Script->GetAI(creature))
+            return scriptedAI;
 
         // AIname in db
         std::string ainame=creature->GetAIName();
-        if(!ai_factory && !ainame.empty())
+        if(!ainame.empty())
             ai_factory = ai_registry.GetRegistryItem( ainame.c_str() );
 
         // select by NPC flags
