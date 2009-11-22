@@ -8552,8 +8552,8 @@ bool Unit::IsImmunedToSpell(SpellEntry const* spellInfo, bool useCharges)
     if (!spellInfo)
         return false;
 
-    // If Spel has this flag cannot be resisted/immuned/etc
-    if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
+    // If Spell has this flag cannot be resisted/immuned/etc
+    if (spellInfo->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
         return false;
 
     SpellImmuneList const& dispelList = m_spellImmune[IMMUNITY_DISPEL];
