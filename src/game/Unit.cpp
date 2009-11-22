@@ -3044,8 +3044,8 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
         return SPELL_MISS_EVADE;
 
     // If Spel has this flag cannot be resisted/immuned/etc
-    //if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
-    //    return SPELL_MISS_NONE;
+    if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
+        return SPELL_MISS_NONE;
 
     // Check for immune (use charges)
     if (pVictim->IsImmunedToSpell(spell,true))
