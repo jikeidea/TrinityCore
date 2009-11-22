@@ -3043,10 +3043,6 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
     if (pVictim->GetTypeId()==TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode() && this != pVictim)
         return SPELL_MISS_EVADE;
 
-    // If Spel has this flag cannot be resisted/immuned/etc
-    if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
-        return SPELL_MISS_NONE;
-
     // Check for immune (use charges)
     if (pVictim->IsImmunedToSpell(spell,true))
         return SPELL_MISS_IMMUNE;
@@ -8554,6 +8550,10 @@ bool Unit::IsImmunedToDamage(SpellSchoolMask shoolMask, bool useCharges)
 bool Unit::IsImmunedToSpell(SpellEntry const* spellInfo, bool useCharges)
 {
     if (!spellInfo)
+        return false;
+
+    // If Spel has this flag cannot be resisted/immuned/etc
+    if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
         return false;
 
     SpellImmuneList const& dispelList = m_spellImmune[IMMUNITY_DISPEL];
