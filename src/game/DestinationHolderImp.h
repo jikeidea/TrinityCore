@@ -85,24 +85,7 @@ DestinationHolder<TRAVELLER>::StartTravel(TRAVELLER &traveller, bool sendMove)
     i_fromY = traveller.GetPositionY();
     i_fromZ = traveller.GetPositionZ();
 
-    float dx = i_destX - i_fromX;
-    float dy = i_destY - i_fromY;
-    float dz = i_destZ - i_fromZ;
-
-    float dist;
-    //Should be for Creature Flying and Swimming.
-    if(traveller.GetTraveller().hasUnitState(UNIT_STAT_IN_FLIGHT))
-        dist = sqrt((dx*dx) + (dy*dy) + (dz*dz));
-    else                                                    //Walking on the ground
-        dist = sqrt((dx*dx) + (dy*dy));
-
-    float speed;
-    if(traveller.GetTraveller().hasUnitState(UNIT_STAT_CHARGING))
-        speed = SPEED_CHARGE * 0.001f;
-    else
-        speed = traveller.Speed() * 0.001f;     // speed is in seconds so convert from second to millisecond
-    i_totalTravelTime = static_cast<uint32>(dist/speed);
-
+    i_totalTravelTime = traveller.GetTotalTrevelTimeTo(i_destX,i_destY,i_destZ);
     i_timeElapsed = 0;
     if(sendMove)
         traveller.MoveTo(i_destX, i_destY, i_destZ, i_totalTravelTime);
@@ -126,12 +109,7 @@ DestinationHolder<TRAVELLER>::UpdateTraveller(TRAVELLER &traveller, uint32 diff,
 
     float x, y, z;
     if(!micro_movement)
-    {
         GetLocationNowNoMicroMovement(x, y, z);
-
-        if( x == -431602080 )
-            return false;
-    }
     else
     {
         if(!traveller.GetTraveller().hasUnitState(UNIT_STAT_MOVING | UNIT_STAT_IN_FLIGHT))
@@ -141,9 +119,6 @@ DestinationHolder<TRAVELLER>::UpdateTraveller(TRAVELLER &traveller, uint32 diff,
             GetLocationNow(traveller.GetTraveller().GetMapId() ,x, y, z, true);                  // Should repositione Object with right Coord, so I can bypass some Grid Relocation
         else
             GetLocationNow(traveller.GetTraveller().GetMapId(), x, y, z, false);
-
-        if( x == -431602080 )
-            return false;
 
         // Change movement computation to micro movement based on last tick coords, this makes system work
         // even on multiple floors zones without hugh vmaps usage ;)
@@ -193,7 +168,7 @@ DestinationHolder<TRAVELLER>::GetLocationNow(uint32 mapid, float &x, float &y, f
             z = z2;
         else
         {
-            //That part is good for mob Walking on the floor. But the floor is not allways what we thought.
+            //That part is good for mob Walking on the floor. But the floor is not always what we thought.
             z = MapManager::Instance().GetBaseMap(mapid)->GetHeight(x,y,i_fromZ,false); // Disable cave check
             const float groundDist = sqrt(distanceX*distanceX + distanceY*distanceY);
             const float zDist = fabs(i_fromZ - z) + 0.000001f;
@@ -206,11 +181,11 @@ DestinationHolder<TRAVELLER>::GetLocationNow(uint32 mapid, float &x, float &y, f
 
 template<typename TRAVELLER>
 float
-DestinationHolder<TRAVELLER>::GetDistance2dFromDestSq(const WorldObject &obj) const
+DestinationHolder<TRAVELLER>::GetDistance3dFromDestSq(const WorldObject &obj) const
 {
     float x,y,z;
     obj.GetPosition(x,y,z);
-    return (i_destX-x)*(i_destX-x)+(i_destY-y)*(i_destY-y);
+    return (i_destX-x)*(i_destX-x)+(i_destY-y)*(i_destY-y)+(i_destZ-z)*(i_destZ-z);
 }
 
 template<typename TRAVELLER>

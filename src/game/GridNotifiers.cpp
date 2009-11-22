@@ -39,6 +39,11 @@ VisibleChangesNotifier::Visit(PlayerMapType &m)
             continue;
 
         iter->getSource()->UpdateVisibilityOf(&i_object);
+
+        if(!iter->getSource()->GetSharedVisionList().empty())
+            for(SharedVisionList::const_iterator i = iter->getSource()->GetSharedVisionList().begin();
+                i != iter->getSource()->GetSharedVisionList().end(); ++i)
+                    (*i)->UpdateVisibilityOf(&i_object);
     }
 }
 
@@ -109,7 +114,7 @@ Deliverer::Visit(PlayerMapType &m)
 {
     for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        if (!i_dist || iter->getSource()->GetDistance(&i_source) <= i_dist)
+        if (!i_dist || iter->getSource()->GetExactDistSq(&i_source) <= i_dist)
         {
             // Send packet to all who are sharing the player's vision
             if (!iter->getSource()->GetSharedVisionList().empty())
@@ -129,7 +134,7 @@ Deliverer::Visit(CreatureMapType &m)
 {
     for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
     {
-        if (!i_dist || iter->getSource()->GetDistance(&i_source) <= i_dist)
+        if (!i_dist || iter->getSource()->GetExactDistSq(&i_source) <= i_dist)
         {
             // Send packet to all who are sharing the creature's vision
             if (!iter->getSource()->GetSharedVisionList().empty())
@@ -152,7 +157,7 @@ Deliverer::Visit(DynamicObjectMapType &m)
             // Send packet back to the caster if the caster has vision of dynamic object
             Player* caster = (Player*)iter->getSource()->GetCaster();
             if (caster && caster->GetUInt64Value(PLAYER_FARSIGHT) == iter->getSource()->GetGUID() &&
-                (!i_dist || iter->getSource()->GetDistance(&i_source) <= i_dist))
+                (!i_dist || iter->getSource()->GetExactDistSq(&i_source) <= i_dist))
                 SendPacket(caster);
         }
     }
@@ -205,9 +210,6 @@ ObjectUpdater::Visit(GridRefManager<T> &m)
     }
 }
 
-template void ObjectUpdater::Visit<GameObject>(GameObjectMapType &);
-template void ObjectUpdater::Visit<DynamicObject>(DynamicObjectMapType &);
-
 bool CannibalizeObjectCheck::operator()(Corpse* u)
 {
     // ignore bones
@@ -224,4 +226,7 @@ bool CannibalizeObjectCheck::operator()(Corpse* u)
 
     return false;
 }
+
+template void ObjectUpdater::Visit<GameObject>(GameObjectMapType &);
+template void ObjectUpdater::Visit<DynamicObject>(DynamicObjectMapType &);
 
