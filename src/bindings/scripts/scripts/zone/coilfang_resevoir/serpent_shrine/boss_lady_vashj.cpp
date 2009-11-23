@@ -204,6 +204,7 @@ struct TRINITY_DLL_DECL boss_lady_vashjAI : public ScriptedAI
         ShieldGeneratorChannel[3] = 0;
 
         m_creature->SetCorpseDelay(1000*60*60);
+        RemoveTaintedCore();
     }
 
     //Called when a tainted elemental dies
@@ -248,21 +249,27 @@ struct TRINITY_DLL_DECL boss_lady_vashjAI : public ScriptedAI
             pInstance->SetData(DATA_LADYVASHJEVENT, IN_PROGRESS);
     }
 
-    void Aggro(Unit *who)
+    void RemoveTaintedCore()
     {
-        if (pInstance)
+        if(!m_creature->GetMap()->IsDungeon())
+            return;
+
+        //remove old tainted cores to prevent cheating in phase 2
+        Map *map = m_creature->GetMap();
+        Map::PlayerList const &PlayerList = map->GetPlayers();
+        for(Map::PlayerList::const_iterator i = PlayerList.begin();i != PlayerList.end(); ++i)
         {
-            //remove old tainted cores to prevent cheating in phase 2
-            Map *map = m_creature->GetMap();
-            Map::PlayerList const &PlayerList = map->GetPlayers();
-            for(Map::PlayerList::const_iterator i = PlayerList.begin();i != PlayerList.end(); ++i)
+            if(Player* i_pl = i->getSource())
             {
-                if(Player* i_pl = i->getSource())
-                {
-                    i_pl->DestroyItemCount(31088, 1, true);
-                }
+                i_pl->DestroyItemCount(31088, 1, true);
             }
         }
+    }
+
+    void Aggro(Unit *who)
+    {
+        RemoveTaintedCore();
+
         if(Phase != 2)
             AttackStart(who);
 
@@ -869,22 +876,47 @@ CreatureAI* GetAI_mob_coilfang_elite(Creature *_Creature)
 
 //Coilfang Strider
 //It hits plate for about 8000 damage, has a Mind Blast spell doing about 3000 shadow damage, and a Psychic Scream Aura, which fears everybody in a 8 yard range of it every 2-3 seconds , for 5 seconds and increasing their movement speed by 150% during the fear.
+#define SPELL_PANIC         38257
+#define SPELL_MINDBLAST     38259
+
+struct TRINITY_DLL_DECL mob_coilfang_striderAI : public ScriptedAI
+{
+    mob_coilfang_striderAI(Creature *c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 Blast_Timer;
+
+    void Reset()
+    {
+        Blast_Timer = 8000;
+    }
+
+    void Aggro(Unit *who)
+    {
+        DoCast(m_creature,SPELL_PANIC,true);
+    }
+
+    void UpdateAI (const uint32 diff)
+    {
+
+        if (!UpdateVictim() )
+            return;
+
+        if(Blast_Timer < diff)
+        {
+            DoCast(SelectUnit(SELECT_TARGET_RANDOM, 0),SPELL_MINDBLAST);
+            Blast_Timer = 30000+rand()% 10000;
+        }else Blast_Timer -= diff;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
 CreatureAI* GetAI_mob_coilfang_strider(Creature *_Creature)
 {
-    SimpleAI* ai = new SimpleAI (_Creature);
-
-    ai->Spell[0].Enabled = true;
-    ai->Spell[0].Spell_Id = 41374;                          //Mind Blast
-    ai->Spell[0].Cooldown = 30000;
-    ai->Spell[0].CooldownRandomAddition = 10000;
-    ai->Spell[0].First_Cast = 8000;
-    ai->Spell[0].Cast_Target_Type = CAST_HOSTILE_TARGET;
-
-    //Scream aura not implemented
-
-    ai->EnterEvadeMode();
-
-    return ai;
+    return new mob_coilfang_striderAI (_Creature);
 }
 
 struct TRINITY_DLL_DECL mob_shield_generator_channelAI : public ScriptedAI
