@@ -1288,6 +1288,7 @@ void Aura::TriggerSpell()
 //                    case 25544:
 //                        break;
                     // Thaumaturgy Channel
+                    //dont work, used db support (see on spell_linked_spell)
                     case 9712: trigger_spell_id = 21029; break;
 //                    // Egan's Blaster
 //                    case 17368: break;
