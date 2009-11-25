@@ -32,7 +32,7 @@ go_landmark_treasure
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*######
 ## mob_aquementas
@@ -153,57 +153,57 @@ struct TRINITY_DLL_DECL npc_custodian_of_timeAI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player *pTemp = Unit::GetPlayer(PlayerGUID);
-        if( !pTemp )
+        Player *pPlayer = GetPlayerForEscort();
+        if (!pPlayer)
             return;
 
-        switch( i )
+        switch(i)
         {
-            case 2: DoScriptText(WHISPER_CUSTODIAN_1, m_creature, pTemp); break;
-            case 3: DoScriptText(WHISPER_CUSTODIAN_2, m_creature, pTemp); break;
-            case 4: DoScriptText(WHISPER_CUSTODIAN_3, m_creature, pTemp); break;
-            case 5: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pTemp); break;
-            case 7: DoScriptText(WHISPER_CUSTODIAN_5, m_creature, pTemp); break;
-            case 8: DoScriptText(WHISPER_CUSTODIAN_6, m_creature, pTemp); break;
-            case 9: DoScriptText(WHISPER_CUSTODIAN_7, m_creature, pTemp); break;
-            case 10: DoScriptText(WHISPER_CUSTODIAN_8, m_creature, pTemp); break;
-            case 11: DoScriptText(WHISPER_CUSTODIAN_9, m_creature, pTemp); break;
-            case 12: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pTemp); break;
-            case 15: DoScriptText(WHISPER_CUSTODIAN_10, m_creature, pTemp); break;
-            case 16: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pTemp); break;
-            case 18: DoScriptText(WHISPER_CUSTODIAN_11, m_creature, pTemp); break;
-            case 19: DoScriptText(WHISPER_CUSTODIAN_12, m_creature, pTemp); break;
-            case 20: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pTemp); break;
-            case 24: DoScriptText(WHISPER_CUSTODIAN_13, m_creature, pTemp); break;
-            case 25: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pTemp); break;
-            case 26:
-                DoScriptText(WHISPER_CUSTODIAN_14, m_creature, pTemp);
-                DoCast(pTemp,34883);
-                //below here is temporary workaround, to be removed when spell works properly
-                pTemp->AreaExploredOrEventHappens(10277);
+            case 0: DoScriptText(WHISPER_CUSTODIAN_1, m_creature, pPlayer); break;
+            case 1: DoScriptText(WHISPER_CUSTODIAN_2, m_creature, pPlayer); break;
+            case 2: DoScriptText(WHISPER_CUSTODIAN_3, m_creature, pPlayer); break;
+            case 3: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pPlayer); break;
+            case 5: DoScriptText(WHISPER_CUSTODIAN_5, m_creature, pPlayer); break;
+            case 6: DoScriptText(WHISPER_CUSTODIAN_6, m_creature, pPlayer); break;
+            case 7: DoScriptText(WHISPER_CUSTODIAN_7, m_creature, pPlayer); break;
+            case 8: DoScriptText(WHISPER_CUSTODIAN_8, m_creature, pPlayer); break;
+            case 9: DoScriptText(WHISPER_CUSTODIAN_9, m_creature, pPlayer); break;
+            case 10: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pPlayer); break;
+            case 13: DoScriptText(WHISPER_CUSTODIAN_10, m_creature, pPlayer); break;
+            case 14: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pPlayer); break;
+            case 16: DoScriptText(WHISPER_CUSTODIAN_11, m_creature, pPlayer); break;
+            case 17: DoScriptText(WHISPER_CUSTODIAN_12, m_creature, pPlayer); break;
+            case 18: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pPlayer); break;
+            case 22: DoScriptText(WHISPER_CUSTODIAN_13, m_creature, pPlayer); break;
+            case 23: DoScriptText(WHISPER_CUSTODIAN_4, m_creature, pPlayer); break;
+            case 24:
+                DoScriptText(WHISPER_CUSTODIAN_14, m_creature, pPlayer);
+                DoCast(pPlayer, 34883);
+                // below here is temporary workaround, to be removed when spell works properly
+                pPlayer->AreaExploredOrEventHappens(10277);
                 break;
         }
     }
 
     void MoveInLineOfSight(Unit *who)
     {
-        if( IsBeingEscorted )
+        if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
 
-        if( who->GetTypeId() == TYPEID_PLAYER )
+        if (who->GetTypeId() == TYPEID_PLAYER)
         {
-            if( ((Player*)who)->HasAura(34877,1) && ((Player*)who)->GetQuestStatus(10277) == QUEST_STATUS_INCOMPLETE )
+            if (who->HasAura(34877,1) && CAST_PLR(who)->GetQuestStatus(10277) == QUEST_STATUS_INCOMPLETE)
             {
                 float Radius = 10.0;
-                if( m_creature->IsWithinDistInMap(who, Radius) )
+                if (m_creature->IsWithinDistInMap(who, Radius))
                 {
-                    ((npc_escortAI*)(m_creature->AI()))->Start(false, false, false, who->GetGUID());
+                    Start(false, false, who->GetGUID());
                 }
             }
         }
     }
 
-    void Aggro(Unit* who) { }
+    void EnterCombat(Unit* who) { }
     void Reset() { }
 
     void UpdateAI(const uint32 diff)
@@ -371,16 +371,21 @@ bool GossipSelect_npc_stone_watcher_of_norgannon(Player *player, Creature *_Crea
 ## npc_OOX17
 ######*/
 
-#define Q_OOX17             648
-#define SPAWN_FIRST         7803
-#define SPAWN_SECOND_1      5617
-#define SPAWN_SECOND_2      7805
-#define SAY_SCOFF           -1060004
-#define SAY_CHICKEN_ACC     -1060000
-#define SAY_CHICKEN_AGGRO_1 -1060001
-#define SAY_CHICKEN_AGGRO_2 -1060002
-#define SAY_CHICKEN_AMB     -1060003
-#define SAY_CHICKEN_COMP    -1060005
+enum e00X17
+{
+    //texts are signed for 7806
+    SAY_OOX_START           = -1060000,
+    SAY_OOX_AGGRO1          = -1060001,
+    SAY_OOX_AGGRO2          = -1060002,
+    SAY_OOX_AMBUSH          = -1060003,
+    SAY_OOX17_AMBUSH_REPLY  = -1060004,
+    SAY_OOX_END             = -1060005,
+
+    Q_OOX17                 = 648,
+    SPAWN_FIRST             = 7803,
+    SPAWN_SECOND_1          = 5617,
+    SPAWN_SECOND_2          = 7805
+};
 
 struct TRINITY_DLL_DECL npc_OOX17AI : public npc_escortAI
 {
@@ -388,9 +393,9 @@ struct TRINITY_DLL_DECL npc_OOX17AI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch(i) {
@@ -398,71 +403,53 @@ struct TRINITY_DLL_DECL npc_OOX17AI : public npc_escortAI
                 m_creature->SummonCreature(SPAWN_FIRST, -8350.96, -4445.79, 10.10, 6.20, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                 m_creature->SummonCreature(SPAWN_FIRST, -8355.96, -4447.79, 10.10, 6.27, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                 m_creature->SummonCreature(SPAWN_FIRST, -8353.96, -4442.79, 10.10, 6.08, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                DoScriptText(SAY_CHICKEN_AMB, m_creature);
+                DoScriptText(SAY_OOX_AMBUSH, m_creature);
                 break;
 
             case 56:
                 m_creature->SummonCreature(SPAWN_SECOND_1, -7510.07, -4795.50, 9.35, 6.06, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                 m_creature->SummonCreature(SPAWN_SECOND_2, -7515.07, -4797.50, 9.35, 6.22, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                 m_creature->SummonCreature(SPAWN_SECOND_2, -7518.07, -4792.50, 9.35, 6.22, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-                DoScriptText(SAY_CHICKEN_AMB, m_creature);
-                {Unit* scoff = FindCreature(SPAWN_SECOND_2, 30, m_creature);
-                if(scoff)
-                    DoScriptText(SAY_SCOFF, scoff);}break;
+                DoScriptText(SAY_OOX_AMBUSH, m_creature);
+                if (Unit* scoff = FindCreature(SPAWN_SECOND_2, 30, m_creature))
+                    DoScriptText(SAY_OOX17_AMBUSH_REPLY, scoff);
                 break;
 
             case 86:
-                DoScriptText(SAY_CHICKEN_COMP, m_creature);
-                player->GroupEventHappens(Q_OOX17, m_creature);
+                if (pPlayer)
+                {
+                    DoScriptText(SAY_OOX_END, m_creature);
+                    pPlayer->GroupEventHappens(Q_OOX17, m_creature);
+                }
                 break;
         }
     }
 
     void Reset(){}
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
-        switch (rand()%2)
-        {
-        case 0: DoScriptText(SAY_CHICKEN_AGGRO_1, m_creature); break;
-        case 1: DoScriptText(SAY_CHICKEN_AGGRO_2, m_creature); break;
-        }
+        DoScriptText(RAND(SAY_OOX_AGGRO1,SAY_OOX_AGGRO2), m_creature);
     }
 
     void JustSummoned(Creature* summoned)
     {
         summoned->AI()->AttackStart(m_creature);
     }
+};
 
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID)
-        {
-            if (Player* player = Unit::GetPlayer(PlayerGUID))
-                player->FailQuest(Q_OOX17);
-        }
-    }
-
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
-        if (!UpdateVictim())
-            return;
-    }
-    };
-
-bool QuestAccept_npc_OOX17(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_OOX17(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == Q_OOX17)
     {
-        creature->setFaction(113);
-        creature->SetHealth(creature->GetMaxHealth());
-        creature->SetUInt32Value(UNIT_FIELD_BYTES_1,0);
-        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
-        DoScriptText(SAY_CHICKEN_ACC, creature);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        pCreature->setFaction(113);
+        pCreature->SetHealth(pCreature->GetMaxHealth());
+        pCreature->SetUInt32Value(UNIT_FIELD_BYTES_1,0);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_2);
+        DoScriptText(SAY_OOX_START, pCreature);
 
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_OOX17AI, pCreature->AI()))
+            pEscortAI->Start(true, false, pPlayer->GetGUID());
     }
     return true;
 }

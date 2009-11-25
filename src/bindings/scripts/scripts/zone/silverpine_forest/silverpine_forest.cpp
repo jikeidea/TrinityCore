@@ -17,7 +17,7 @@
 /* ScriptData
 SDName: Silverpine_Forest
 SD%Complete: 100
-SDComment: Quest support: 1886, 435
+SDComment: Quest support: 1886, 435, 452
 SDCategory: Silverpine Forest
 EndScriptData */
 
@@ -27,7 +27,7 @@ npc_deathstalker_erland
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*######
 ## npc_astor_hadren
@@ -91,24 +91,27 @@ bool GossipSelect_npc_astor_hadren(Player *player, Creature *_Creature, uint32 s
 ## npc_deathstalker_erland
 ######*/
 
-#define SAY_QUESTACCEPT -1000335
-#define SAY_START       -1000336
-#define SAY_AGGRO_1     -1000337
-#define SAY_AGGRO_2     -1000338
-#define SAY_LAST        -1000339
+enum eErland
+{
+    SAY_QUESTACCEPT     = -1000335,
+    SAY_START           = -1000336,
+    SAY_AGGRO_1         = -1000337,
+    SAY_AGGRO_2         = -1000338,
+    SAY_LAST            = -1000339,
 
-#define SAY_THANKS      -1000340
-#define SAY_RANE        -1000341
-#define SAY_ANSWER      -1000342
-#define SAY_MOVE_QUINN  -1000343
+    SAY_THANKS          = -1000340,
+    SAY_RANE            = -1000341,
+    SAY_ANSWER          = -1000342,
+    SAY_MOVE_QUINN      = -1000343,
 
-#define SAY_GREETINGS   -1000344
-#define SAY_QUINN       -1000345
-#define SAY_ON_BYE      -1000346
+    SAY_GREETINGS       = -1000344,
+    SAY_QUINN           = -1000345,
+    SAY_ON_BYE          = -1000346,
 
-#define QUEST_ESCORTING 435
-#define NPC_RANE        1950
-#define NPC_QUINN       1951
+    QUEST_ESCORTING     = 435,
+    NPC_RANE            = 1950,
+    NPC_QUINN           = 1951
+};
 
 struct TRINITY_DLL_DECL npc_deathstalker_erlandAI : public npc_escortAI
 {
@@ -116,59 +119,52 @@ struct TRINITY_DLL_DECL npc_deathstalker_erlandAI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch(i)
         {
-        case 1: DoScriptText(SAY_START, m_creature, player);break;
+        case 1: DoScriptText(SAY_START, m_creature, pPlayer);break;
         case 13:
-            DoScriptText(SAY_LAST, m_creature, player);
-            player->GroupEventHappens(QUEST_ESCORTING, m_creature);break;
-        case 14: DoScriptText(SAY_THANKS, m_creature, player);break;
+            DoScriptText(SAY_LAST, m_creature, pPlayer);
+            pPlayer->GroupEventHappens(QUEST_ESCORTING, m_creature); break;
+        case 14: DoScriptText(SAY_THANKS, m_creature, pPlayer); break;
         case 15: {
-                Unit* Rane = FindCreature(NPC_RANE, 20, m_creature);
-                if(Rane)
+                Unit* Rane = FindCreature(NPC_RANE, 20, me);
+                if (Rane)
                     DoScriptText(SAY_RANE, Rane);
                 break;}
-        case 16: DoScriptText(SAY_ANSWER, m_creature);break;
+        case 16: DoScriptText(SAY_ANSWER, m_creature); break;
         case 17: DoScriptText(SAY_MOVE_QUINN, m_creature); break;
-        case 24: DoScriptText(SAY_GREETINGS, m_creature);break;
+        case 24: DoScriptText(SAY_GREETINGS, m_creature); break;
         case 25: {
-                Unit* Quinn = FindCreature(NPC_QUINN, 20, m_creature);
-                if(Quinn)
+                Unit* Quinn = FindCreature(NPC_QUINN, 20, me);
+                if (Quinn)
                     DoScriptText(SAY_QUINN, Quinn);
                 break;}
-        case 26: DoScriptText(SAY_ON_BYE, m_creature, NULL);break;
+        case 26: DoScriptText(SAY_ON_BYE, m_creature, NULL); break;
 
         }
     }
 
     void Reset() {}
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
-        switch(rand()%2)
-        {
-        case 0: DoScriptText(SAY_AGGRO_1, m_creature, who);break;
-        case 1: DoScriptText(SAY_AGGRO_2, m_creature, who);break;
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
+        DoScriptText(RAND(SAY_AGGRO_1,SAY_AGGRO_2), m_creature, who);
     }
 };
 
-bool QuestAccept_npc_deathstalker_erland(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_deathstalker_erland(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == QUEST_ESCORTING)
     {
-        DoScriptText(SAY_QUESTACCEPT, creature, player);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        DoScriptText(SAY_QUESTACCEPT, pCreature, pPlayer);
+
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_deathstalker_erlandAI, pCreature->AI()))
+            pEscortAI->Start(true, false, pPlayer->GetGUID());
     }
 
     return true;
@@ -209,14 +205,9 @@ CreatureAI* GetAI_npc_deathstalker_erlandAI(Creature *_Creature)
     return (CreatureAI*)deathstalker_erlandAI;
 }
 
-/* ScriptData
-SDName: pyrewood_ambush
-SD%Complete: 100
-SDComment: Quest pyrewood ambush (id 452), you have to kill 4 waves of people: 1, 2, 3, 3.
-           The quest giver is here for help you.
-SDCategory: Script Quests
-
-EndScriptData */
+/*######
+## pyrewood_ambush
+######*/
 
 #define QUEST_PYREWOOD_AMBUSH 452
 

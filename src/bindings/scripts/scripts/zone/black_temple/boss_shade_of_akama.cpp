@@ -392,7 +392,7 @@ struct TRINITY_DLL_DECL boss_shade_of_akamaAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if(!InCombat)
+        if(!m_creature->isInCombat())
             return;
 
         if(IsBanished)
@@ -600,7 +600,8 @@ struct TRINITY_DLL_DECL npc_akamaAI : public ScriptedAI
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             ((boss_shade_of_akamaAI*)Shade->AI())->SetAkamaGUID(m_creature->GetGUID());
             ((boss_shade_of_akamaAI*)Shade->AI())->SetSelectableChannelers();
-            ((boss_shade_of_akamaAI*)Shade->AI())->InCombat = true;
+            //((boss_shade_of_akamaAI*)Shade->AI())->InCombat = true;
+            m_creature->CombatStart(Shade);
             Shade->AddThreat(m_creature, 1000000.0f);
             Shade->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
             Shade->SetUInt64Value(UNIT_FIELD_TARGET, m_creature->GetGUID());

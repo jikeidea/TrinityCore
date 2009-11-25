@@ -196,7 +196,7 @@ struct TRINITY_DLL_DECL boss_felblood_kaelthasAI : public ScriptedAI
         m_creature->InterruptNonMeleeSpells(true);
         m_creature->RemoveAllAuras();
         m_creature->DeleteThreatList();
-        m_creature->CombatStop();
+        m_creature->CombatStop(true);
         m_creature->LoadCreaturesAddon();
 
         if( m_creature->isAlive() )
@@ -204,7 +204,6 @@ struct TRINITY_DLL_DECL boss_felblood_kaelthasAI : public ScriptedAI
 
         m_creature->SetLootRecipient(NULL);
 
-        InCombat = false;
         Reset();
     }
 

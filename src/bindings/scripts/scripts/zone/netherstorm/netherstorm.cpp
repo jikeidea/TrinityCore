@@ -31,7 +31,7 @@ npc_bessy
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*######
 ## npc_manaforge_control_console
@@ -909,22 +909,17 @@ struct TRINITY_DLL_DECL npc_bessyAI : public npc_escortAI
 
     npc_bessyAI(Creature *c) : npc_escortAI(c) {}
 
-    bool Completed;
-
     void JustDied(Unit* killer)
     {
-        if (PlayerGUID)
-        {
-            if (Player* player = Unit::GetPlayer(PlayerGUID))
-                player->FailQuest(Q_ALMABTRIEB);
-        }
+        if (Player* pPlayer = GetPlayerForEscort())
+            pPlayer->FailQuest(Q_ALMABTRIEB);
     }
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch(i)
@@ -941,18 +936,13 @@ struct TRINITY_DLL_DECL npc_bessyAI : public npc_escortAI
                 break;
 
             case 12:
-                if (player)
-                {
-                    player->GroupEventHappens(Q_ALMABTRIEB, m_creature);
-                    Completed = true;
-                }
-                {Unit* Thadell = FindCreature(N_THADELL, 30, m_creature);
-                if(Thadell)
-                    DoScriptText(SAY_THADELL_1, m_creature);}break;
+                if (pPlayer)
+                    pPlayer->GroupEventHappens(Q_ALMABTRIEB, m_creature);
+                if (Unit* Thadell = FindCreature(N_THADELL, 30, me))
+                    DoScriptText(SAY_THADELL_1, m_creature); break;
             case 13:
-                {Unit* Thadell = FindCreature(N_THADELL, 30, m_creature);
-                if(Thadell)
-                    DoScriptText(SAY_THADELL_2, m_creature, player);}break;
+                if (Unit* Thadell = FindCreature(N_THADELL, 30, me))
+                    DoScriptText(SAY_THADELL_2, m_creature, pPlayer); break;
         }
     }
 
@@ -961,28 +951,22 @@ struct TRINITY_DLL_DECL npc_bessyAI : public npc_escortAI
         summoned->AI()->AttackStart(m_creature);
     }
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void Reset()
     {
-        Completed = false;
-        m_creature->setFaction(35);
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
+        me->RestoreFaction();
     }
 
 };
 
-bool QuestAccept_npc_bessy(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_bessy(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == Q_ALMABTRIEB)
     {
-        creature->setFaction(113);
-        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        pCreature->setFaction(113);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        CAST_AI(npc_escortAI, (pCreature->AI()))->Start(true, false, pPlayer->GetGUID());
     }
     return true;
 }

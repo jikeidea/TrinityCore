@@ -30,7 +30,7 @@ npc_kayra_longmane
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*######
 ## npcs_ashyen_and_keleth
@@ -255,86 +255,68 @@ bool GossipSelect_npc_mortog_steamhead(Player *player, Creature *_Creature, uint
 ## npc_kayra_longmane
 ######*/
 
-#define SAY_PROGRESS_1  -1000360
-#define SAY_PROGRESS_2  -1000361
-#define SAY_PROGRESS_3  -1000362
-#define SAY_PROGRESS_4  -1000363
-#define SAY_PROGRESS_5  -1000364
-#define SAY_PROGRESS_6  -1000365
+enum eKayra
+{
+    SAY_START           = -1000360,
+    SAY_AMBUSH1         = -1000361,
+    SAY_PROGRESS        = -1000362,
+    SAY_AMBUSH2         = -1000363,
+    SAY_NEAR_END        = -1000364,
+    SAY_END             = -1000365, //this is signed for 10646
 
-#define QUEST_EFU   9752
-#define MOB_AMBUSH  18042
+    QUEST_ESCAPE_FROM   = 9752,
+    NPC_SLAVEBINDER     = 18042
+};
 
 struct TRINITY_DLL_DECL npc_kayra_longmaneAI : public npc_escortAI
 {
     npc_kayra_longmaneAI(Creature* c) : npc_escortAI(c) {}
 
-    bool Completed;
-
-    void Reset()
-    {
-        Completed = false;
-        m_creature->setFaction(1660);
-    }
-
-    void Aggro(Unit* who){}
-
-    void JustSummoned(Creature *summoned)
-    {
-        summoned->AI()->AttackStart(m_creature);
-        summoned->setFaction(14);
-    }
+    void Reset() { }
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
+
+        if (!pPlayer)
+            return;
 
         switch(i)
         {
-        case 0: DoScriptText(SAY_PROGRESS_1, m_creature, player); break;
-        case 5: DoScriptText(SAY_PROGRESS_2, m_creature, player);
-            m_creature->SummonCreature(MOB_AMBUSH, -922.24, 5357.98, 17.93, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-            m_creature->SummonCreature(MOB_AMBUSH, -922.24, 5357.98, 17.93, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-            break;
-        case 6: DoScriptText(SAY_PROGRESS_3, m_creature, player);
-            m_creature->RemoveUnitMovementFlag(MOVEMENTFLAG_WALK_MODE);
-            break;
-        case 18: DoScriptText(SAY_PROGRESS_4, m_creature, player);
-            m_creature->SummonCreature(MOB_AMBUSH, -671.86, 5379.81, 22.12, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-            m_creature->SummonCreature(MOB_AMBUSH, -671.86, 5379.81, 22.12, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-            break;
-        case 19: m_creature->RemoveUnitMovementFlag(MOVEMENTFLAG_WALK_MODE);
-            DoScriptText(SAY_PROGRESS_5, m_creature, player); break;
-        case 26: DoScriptText(SAY_PROGRESS_6, m_creature, player);
-            Completed = true;
-            if(player)
-                player->GroupEventHappens(QUEST_EFU, m_creature);
-            break;
+            case 4:
+                DoScriptText(SAY_AMBUSH1, m_creature, pPlayer);
+                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                break;
+            case 5:
+                DoScriptText(SAY_PROGRESS, m_creature, pPlayer);
+                SetRun();
+                break;
+            case 16:
+                DoScriptText(SAY_AMBUSH2, m_creature, pPlayer);
+                DoSpawnCreature(NPC_SLAVEBINDER, -10.0f, -5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                DoSpawnCreature(NPC_SLAVEBINDER, -8.0f, 5.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+                break;
+            case 17:
+                SetRun(false);
+                DoScriptText(SAY_NEAR_END, m_creature, pPlayer);
+                break;
+            case 25:
+                DoScriptText(SAY_END, m_creature, pPlayer);
+                pPlayer->GroupEventHappens(QUEST_ESCAPE_FROM, m_creature);
+                break;
         }
-    }
-
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID && !Completed)
-        {
-            Player* player = Unit::GetPlayer(PlayerGUID);
-            if (player && !Completed)
-                player->FailQuest(QUEST_EFU);
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
     }
 };
 
-bool QuestAccept_npc_kayra_longmane(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_kayra_longmane(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
-    if (quest->GetQuestId() == QUEST_EFU)
+    if (pQuest->GetQuestId() == QUEST_ESCAPE_FROM)
     {
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
-        creature->setFaction(113);
+        DoScriptText(SAY_START, pCreature, pPlayer);
+
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_kayra_longmaneAI, pCreature->AI()))
+            pEscortAI->Start(false, false, pPlayer->GetGUID());
     }
     return true;
 }

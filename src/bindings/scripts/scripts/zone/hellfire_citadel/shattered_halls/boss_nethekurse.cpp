@@ -168,16 +168,10 @@ struct TRINITY_DLL_DECL boss_grand_warlock_nethekurseAI : public ScriptedAI
 
         if (m_creature->Attack(who, true))
         {
-            m_creature->AddThreat(who, 0.0f);
-
-            if (!InCombat)
-            {
-                InCombat = true;
-                Aggro(who);
-            }
-
-            if (Phase) DoStartNoMovement(who);
-            else DoStartMovement(who);
+            if (Phase) 
+                DoStartNoMovement(who);
+            else
+                DoStartMovement(who);
         }
     }
 

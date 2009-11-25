@@ -311,7 +311,7 @@ struct TRINITY_DLL_DECL boss_magtheridonAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if (!InCombat)
+        if (!m_creature->isInCombat())
         {
             if (RandChat_Timer < diff)
             {

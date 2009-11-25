@@ -177,8 +177,7 @@ struct TRINITY_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
                     m_creature->InterruptNonMeleeSpells(true);
                     m_creature->RemoveAllAuras();
                     m_creature->DeleteThreatList();
-                    m_creature->CombatStop();
-                    InCombat = false;
+                    m_creature->CombatStop(true);
                     Reset();
                 }
             }

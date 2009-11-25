@@ -32,7 +32,7 @@ npc_isla_starmane
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*######
 ## mob_unkor_the_ruthless
@@ -375,35 +375,33 @@ struct TRINITY_DLL_DECL npc_isla_starmaneAI : public npc_escortAI
 {
     npc_isla_starmaneAI(Creature* c) : npc_escortAI(c) {}
 
-    bool Completed;
-
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if(!player)
+        if (!pPlayer)
             return;
 
         switch(i)
         {
         case 0:
             {
-            GameObject* Cage = FindGameObject(GO_CAGE, 10, m_creature);
-            if(Cage)
+            GameObject* Cage = FindGameObject(GO_CAGE, 10, me);
+            if (Cage)
                 Cage->SetGoState(0);
             }break;
-        case 2: DoScriptText(SAY_PROGRESS_1, m_creature, player); break;
-        case 5: DoScriptText(SAY_PROGRESS_2, m_creature, player); break;
-        case 6: DoScriptText(SAY_PROGRESS_3, m_creature, player); break;
-        case 29:DoScriptText(SAY_PROGRESS_4, m_creature, player);
-            if (player)
+        case 2: DoScriptText(SAY_PROGRESS_1, m_creature, pPlayer); break;
+        case 5: DoScriptText(SAY_PROGRESS_2, m_creature, pPlayer); break;
+        case 6: DoScriptText(SAY_PROGRESS_3, m_creature, pPlayer); break;
+        case 29:DoScriptText(SAY_PROGRESS_4, m_creature, pPlayer);
+            if (pPlayer)
             {
-                if( player->GetTeam() == ALLIANCE)
-                    player->GroupEventHappens(QUEST_EFTW_A, m_creature);
-                else if(player->GetTeam() == HORDE)
-                    player->GroupEventHappens(QUEST_EFTW_H, m_creature);
-            } Completed = true;
-            m_creature->SetInFront(player); break;
+                if (pPlayer->GetTeam() == ALLIANCE)
+                    pPlayer->GroupEventHappens(QUEST_EFTW_A, m_creature);
+                else if (pPlayer->GetTeam() == HORDE)
+                    pPlayer->GroupEventHappens(QUEST_EFTW_H, m_creature);
+            }
+            m_creature->SetInFront(pPlayer); break;
         case 30: m_creature->HandleEmoteCommand(EMOTE_ONESHOT_WAVE); break;
         case 31: DoCast(m_creature, SPELL_CAT);
             m_creature->RemoveUnitMovementFlag(MOVEMENTFLAG_WALK_MODE); break;
@@ -412,39 +410,27 @@ struct TRINITY_DLL_DECL npc_isla_starmaneAI : public npc_escortAI
 
     void Reset()
     {
-        Completed = false;
-        m_creature->setFaction(1660);
+        me->RestoreFaction();
     }
-
-    void Aggro(Unit* who){}
 
     void JustDied(Unit* killer)
     {
-        if (PlayerGUID)
+        if (Player* pPlayer = GetPlayerForEscort())
         {
-            Player* player = Unit::GetPlayer(PlayerGUID);
-            if (player && !Completed)
-            {
-                if(player->GetTeam() == ALLIANCE)
-                    player->FailQuest(QUEST_EFTW_A);
-                else if(player->GetTeam() == HORDE)
-                    player->FailQuest(QUEST_EFTW_H);
-            }
+            if (pPlayer->GetTeam() == ALLIANCE)
+                pPlayer->FailQuest(QUEST_EFTW_A);
+            else if (pPlayer->GetTeam() == HORDE)
+                pPlayer->FailQuest(QUEST_EFTW_H);
         }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
     }
 };
 
-bool QuestAccept_npc_isla_starmane(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_isla_starmane(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == QUEST_EFTW_H || quest->GetQuestId() == QUEST_EFTW_A)
     {
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
-        creature->setFaction(113);
+        CAST_AI(npc_escortAI, (pCreature->AI()))->Start(true, false, pPlayer->GetGUID());
+        pCreature->setFaction(113);
     }
     return true;
 }

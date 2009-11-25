@@ -169,15 +169,6 @@ struct TRINITY_DLL_DECL boss_reliquary_of_soulsAI : public ScriptedAI
         Timer = 0;
     }
 
-    void AttackStart(Unit* who)
-    {
-        if (!InCombat)
-        {
-            Aggro(who);
-            InCombat = true;
-        }
-    }
-
     bool SummonSoul()
     {
         uint32 random = rand()%6;
@@ -198,7 +189,7 @@ struct TRINITY_DLL_DECL boss_reliquary_of_soulsAI : public ScriptedAI
         if(pInstance)
             pInstance->SetData(DATA_RELIQUARYOFSOULSEVENT, DONE);
 
-        InCombat = false;
+        //InCombat = false;
     }
 
     void UpdateAI(const uint32 diff)
@@ -406,7 +397,7 @@ struct TRINITY_DLL_DECL boss_essence_of_sufferingAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if(InCombat)
+        if(m_creature->isInCombat())
         {
             //Supposed to be cast on nearest target
             if(FixateTimer < diff)

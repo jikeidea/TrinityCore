@@ -40,7 +40,7 @@ npc_enraged_spirit
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*#####
 # mob_mature_netherwing_drake
@@ -878,7 +878,7 @@ struct TRINITY_DLL_DECL npc_earthmender_wildaAI : public npc_escortAI
 
     void Aggro(Unit *who)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* player = GetPlayerForEscort();
 
         if(who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == NPC_COILSKAR_ASSASSIN)
             DoScriptText(SAY_AGGRO2, m_creature, player);
@@ -893,7 +893,7 @@ struct TRINITY_DLL_DECL npc_earthmender_wildaAI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* player = GetPlayerForEscort();
 
         if (!player)
             return;
@@ -962,7 +962,7 @@ struct TRINITY_DLL_DECL npc_earthmender_wildaAI : public npc_escortAI
 
        void SummonAssassin()
        {
-           Player* player = Unit::GetPlayer(PlayerGUID);
+           Player* player = GetPlayerForEscort();
 
            Unit* CoilskarAssassin = m_creature->SummonCreature(NPC_COILSKAR_ASSASSIN, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 0);
            if( CoilskarAssassin )
@@ -979,9 +979,9 @@ struct TRINITY_DLL_DECL npc_earthmender_wildaAI : public npc_escortAI
 
        void JustDied(Unit* killer)
        {
-           if (PlayerGUID && !Completed)
+           if (!Completed)
            {
-               Player* player = Unit::GetPlayer(PlayerGUID);
+               Player* player = GetPlayerForEscort();
                if (player)
                    player->FailQuest(QUEST_ESCAPE_FROM_COILSKAR_CISTERN);
            }
@@ -1058,7 +1058,8 @@ bool QuestAccept_npc_earthmender_wilda(Player* player, Creature* creature, Quest
     if (quest->GetQuestId() == QUEST_ESCAPE_FROM_COILSKAR_CISTERN)
     {
         creature->setFaction(113);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        if (npc_earthmender_wildaAI* pEscortAI = CAST_AI(npc_earthmender_wildaAI, creature->AI()))
+            pEscortAI->Start(false, false, player->GetGUID(), quest);
     }
     return true;
 }

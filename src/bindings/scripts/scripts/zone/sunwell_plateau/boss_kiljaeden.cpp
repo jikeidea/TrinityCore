@@ -856,7 +856,7 @@ struct TRINITY_DLL_DECL mob_hand_of_the_deceiverAI : public ScriptedAI
     }
 
     void UpdateAI(const uint32 diff){
-        if(!InCombat)
+        if(!m_creature->isInCombat())
             DoCast(m_creature, SPELL_SHADOW_CHANNELING);
 
         if(!UpdateVictim())

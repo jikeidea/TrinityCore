@@ -36,7 +36,7 @@ npc_rocknot
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 #include "def_blackrock_depths.h"
 
 #define C_GRIMSTONE         10096
@@ -1134,7 +1134,7 @@ struct TRINITY_DLL_DECL npc_rocknotAI : public npc_escortAI
 
     void Reset()
     {
-        if (IsBeingEscorted)
+        if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
 
         BreakKeg_Timer = 0;
@@ -1245,7 +1245,8 @@ bool ChooseReward_npc_rocknot(Player *player, Creature *_Creature, const Quest *
         {
             DoScriptText(SAY_GOT_BEER, _Creature);
             _Creature->CastSpell(_Creature,SPELL_DRUNKEN_RAGE,false);
-            ((npc_escortAI*)(_Creature->AI()))->Start(false, false, false);
+            if (npc_escortAI* pEscortAI = CAST_AI(npc_rocknotAI, _Creature->AI()))
+                pEscortAI->Start(false, false);
         }
     }
 

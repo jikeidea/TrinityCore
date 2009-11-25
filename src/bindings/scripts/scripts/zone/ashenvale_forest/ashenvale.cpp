@@ -1,4 +1,4 @@
-/* Copyright (C) 2006 - 2008 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
+/* Copyright (C) 2006 - 2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -27,7 +27,7 @@ npc_ruul_snowhoof
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*####
 # npc_torek
@@ -59,18 +59,18 @@ struct TRINITY_DLL_DECL npc_torekAI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch (i)
         {
         case 1:
-            DoScriptText(SAY_MOVE, m_creature, player);
+            DoScriptText(SAY_MOVE, m_creature, pPlayer);
             break;
         case 8:
-            DoScriptText(SAY_PREPARE, m_creature, player);
+            DoScriptText(SAY_PREPARE, m_creature, pPlayer);
             break;
         case 19:
             //TODO: verify location and creatures amount.
@@ -79,12 +79,13 @@ struct TRINITY_DLL_DECL npc_torekAI : public npc_escortAI
             m_creature->SummonCreature(ENTRY_SILVERWING_WARRIOR,1778.73,-2049.50,109.83,1.67,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,25000);
             break;
         case 20:
-            DoScriptText(SAY_WIN, m_creature, player);
+            DoScriptText(SAY_WIN, m_creature, pPlayer);
             Completed = true;
-            player->GroupEventHappens(QUEST_TOREK_ASSULT,m_creature);
+            if (pPlayer)
+                pPlayer->GroupEventHappens(QUEST_TOREK_ASSULT, m_creature);
             break;
         case 21:
-            DoScriptText(SAY_END, m_creature, player);
+            DoScriptText(SAY_END, m_creature, pPlayer);
             break;
         }
     }
@@ -96,22 +97,11 @@ struct TRINITY_DLL_DECL npc_torekAI : public npc_escortAI
         Completed = false;
     }
 
-    void Aggro(Unit* who)
-    {
-    }
+    void EnterCombat(Unit* who) {}
 
     void JustSummoned(Creature* summoned)
     {
         summoned->AI()->AttackStart(m_creature);
-    }
-
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID && !Completed)
-        {
-            if (Player* player = Unit::GetPlayer(PlayerGUID))
-                player->FailQuest(QUEST_TOREK_ASSULT);
-        }
     }
 
     void UpdateAI(const uint32 diff)
@@ -135,14 +125,16 @@ struct TRINITY_DLL_DECL npc_torekAI : public npc_escortAI
     }
 };
 
-bool QuestAccept_npc_torek(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_torek(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == QUEST_TOREK_ASSULT)
     {
         //TODO: find companions, make them follow Torek, at any time (possibly done by mangos/database in future?)
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, true, player->GetGUID());
-        DoScriptText(SAY_READY, creature, player);
-        creature->setFaction(113);
+        DoScriptText(SAY_READY, pCreature, pPlayer);
+        pCreature->setFaction(113);
+
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_torekAI, pCreature->AI()))
+            pEscortAI->Start(true, true, pPlayer->GetGUID());
     }
 
     return true;
@@ -192,9 +184,9 @@ struct TRINITY_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
 
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch(i)
@@ -202,7 +194,7 @@ struct TRINITY_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
         case 0:    {
                 m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                 GameObject* Cage = FindGameObject(GO_CAGE, 20, m_creature);
-                if(Cage)
+                if (Cage)
                     Cage->SetGoState(0);
                 break;}
         case 13:
@@ -216,21 +208,20 @@ struct TRINITY_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
                 m_creature->SummonCreature(3926, 3503.682373, -489.393799, 186.629684, 4.349232, TEMPSUMMON_DEAD_DESPAWN, 60000);
                 break;
 
-        case 21:
-                player->GroupEventHappens(QUEST_FREEDOM_TO_RUUL,m_creature);
-                break;
+        case 21:{
+                if (pPlayer)
+                    pPlayer->GroupEventHappens(QUEST_FREEDOM_TO_RUUL, m_creature);
+
+                break;  }
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void Reset()
     {
-        if (!IsBeingEscorted)
-            m_creature->setFaction(1602);
-
         GameObject* Cage = FindGameObject(GO_CAGE, 20, m_creature);
-        if(Cage)
+        if (Cage)
             Cage->SetGoState(1);
     }
 
@@ -239,28 +230,20 @@ struct TRINITY_DLL_DECL npc_ruul_snowhoofAI : public npc_escortAI
         summoned->AI()->AttackStart(m_creature);
     }
 
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID)
-        {
-            Player* player = Unit::GetPlayer(PlayerGUID);
-            if (player)
-                player->FailQuest(QUEST_FREEDOM_TO_RUUL);
-        }
-    }
-
     void UpdateAI(const uint32 diff)
     {
         npc_escortAI::UpdateAI(diff);
     }
 };
 
-bool QuestAccept_npc_ruul_snowhoof(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_ruul_snowhoof(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
     if (quest->GetQuestId() == QUEST_FREEDOM_TO_RUUL)
     {
-        creature->setFaction(113);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        pCreature->setFaction(113);
+
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_ruul_snowhoofAI, (pCreature->AI())))
+            pEscortAI->Start(true, false, pPlayer->GetGUID());
     }
     return true;
 }

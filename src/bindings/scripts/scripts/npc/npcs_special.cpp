@@ -1037,8 +1037,6 @@ struct TRINITY_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
         m_creature->SetStatFloatValue(UNIT_FIELD_BASEATTACKTIME, Info->baseattacktime + delta);
         m_creature->SetStatFloatValue(UNIT_FIELD_RANGED_ATTACK_POWER , Info->attackpower);
 
-        InCombat = false;
-
     }
 
     //Redefined for random target selection:
@@ -1060,7 +1058,6 @@ struct TRINITY_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
                     m_creature->setAttackTimer(BASE_ATTACK, (rand() % 10) * 100);
                     SpellTimer = (rand() % 10) * 100;
                     AttackStart(who);
-                    InCombat = true;
                 }
             }
         }
@@ -1072,7 +1069,7 @@ struct TRINITY_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
             return;
 
         //Follow if not in combat
-        if (!m_creature->hasUnitState(UNIT_STAT_FOLLOW)&& !InCombat)
+        if (!m_creature->hasUnitState(UNIT_STAT_FOLLOW)&& !m_creature->isInCombat())
         {
             m_creature->GetMotionMaster()->Clear();
             m_creature->GetMotionMaster()->MoveFollow(Owner,PET_FOLLOW_DIST,PET_FOLLOW_ANGLE);
@@ -1081,10 +1078,8 @@ struct TRINITY_DLL_DECL npc_snake_trap_serpentsAI : public ScriptedAI
         //No victim -> get new from owner (need this because MoveInLineOfSight won't work while following -> corebug)
         if (!m_creature->getVictim())
         {
-            if (InCombat)
+            if (m_creature->isInCombat())
                 DoStopAttack();
-
-            InCombat = false;
 
             if(Owner->getAttackerForHelper())
                 AttackStart(Owner->getAttackerForHelper());

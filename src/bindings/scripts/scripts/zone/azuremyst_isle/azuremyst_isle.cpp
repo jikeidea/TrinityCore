@@ -29,10 +29,15 @@ npc_magwin
 npc_susurrus
 npc_geezle
 mob_nestlewood_owlkin
+item_draenei_fishing_net(i23654)
+item_inoculating_crystal            Quest Inoculating. Prevent abuse
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
+#include "SpellMgr.h"
+#include "Spell.h"
+#include "WorldPacket.h"
 #include <cmath>
 
 /*######
@@ -225,7 +230,7 @@ struct TRINITY_DLL_DECL npc_engineer_spark_overgrindAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        if( !InCombat )
+        if( !m_creature->isInCombat() )
         {
             if (Emote_Timer < diff)
             {
@@ -315,79 +320,63 @@ CreatureAI* GetAI_npc_injured_draenei(Creature *_Creature)
 ## npc_magwin
 ######*/
 
-#define SAY_START               -1000111
-#define SAY_AGGRO               -1000112
-#define SAY_PROGRESS            -1000113
-#define SAY_END1                -1000114
-#define SAY_END2                -1000115
-#define EMOTE_HUG               -1000116
+enum eMagwin
+{
+    SAY_START                   = -1000111,
+    SAY_AGGRO                   = -1000112,
+    SAY_PROGRESS                = -1000113,
+    SAY_END1                    = -1000114,
+    SAY_END2                    = -1000115,
+    EMOTE_HUG                   = -1000116,
 
-#define QUEST_A_CRY_FOR_HELP    9528
+    QUEST_A_CRY_FOR_SAY_HELP    = 9528
+};
 
 struct TRINITY_DLL_DECL npc_magwinAI : public npc_escortAI
 {
     npc_magwinAI(Creature *c) : npc_escortAI(c) {}
 
-
     void WaypointReached(uint32 i)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
+        Player* pPlayer = GetPlayerForEscort();
 
-        if (!player)
+        if (!pPlayer)
             return;
 
         switch(i)
         {
         case 0:
-            DoScriptText(SAY_START, m_creature, player);
+            DoScriptText(SAY_START, m_creature, pPlayer);
             break;
         case 17:
-            DoScriptText(SAY_PROGRESS, m_creature, player);
+            DoScriptText(SAY_PROGRESS, m_creature, pPlayer);
             break;
         case 28:
-            DoScriptText(SAY_END1, m_creature, player);
+            DoScriptText(SAY_END1, m_creature, pPlayer);
             break;
         case 29:
-            DoScriptText(EMOTE_HUG, m_creature, player);
-            DoScriptText(SAY_END2, m_creature, player);
-            player->GroupEventHappens(QUEST_A_CRY_FOR_HELP,m_creature);
+            DoScriptText(EMOTE_HUG, m_creature, pPlayer);
+            DoScriptText(SAY_END2, m_creature, pPlayer);
+            pPlayer->GroupEventHappens(QUEST_A_CRY_FOR_SAY_HELP,m_creature);
             break;
         }
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         DoScriptText(SAY_AGGRO, m_creature, who);
     }
 
-    void Reset()
-    {
-        if (!IsBeingEscorted)
-            m_creature->setFaction(80);
-    }
-
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID)
-        {
-            Player* player = Unit::GetPlayer(PlayerGUID);
-            if (player)
-                player->FailQuest(QUEST_A_CRY_FOR_HELP);
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
-    }
+    void Reset() { }
 };
 
-bool QuestAccept_npc_magwin(Player* player, Creature* creature, Quest const* quest)
+bool QuestAccept_npc_magwin(Player* pPlayer, Creature* pCreature, Quest const* quest)
 {
-    if (quest->GetQuestId() == QUEST_A_CRY_FOR_HELP)
+    if (quest->GetQuestId() == QUEST_A_CRY_FOR_SAY_HELP)
     {
-        creature->setFaction(113);
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
+        pCreature->setFaction(113);
+        if (npc_escortAI* pEscortAI = CAST_AI(npc_escortAI, pCreature->AI()))
+            pEscortAI->Start(true, false, pPlayer->GetGUID());
     }
     return true;
 }
@@ -430,6 +419,7 @@ CreatureAI* GetAI_npc_magwinAI(Creature *_Creature)
 
     return (CreatureAI*)magwinAI;
 }
+
 
 /*######
 ## npc_susurrus
@@ -703,6 +693,5 @@ void AddSC_azuremyst_isle()
     newscript->Name="mob_nestlewood_owlkin";
     newscript->GetAI = &GetAI_mob_nestlewood_owlkinAI;
     newscript->RegisterSelf();
-
 }
 

@@ -383,15 +383,6 @@ struct TRINITY_DLL_DECL mob_soaring_eagleAI : public ScriptedAI
 
     void Aggro(Unit *who) {DoZoneInCombat();}
 
-    void AttackStart(Unit *who)
-    {
-        if (!InCombat)
-        {
-            Aggro(who);
-            InCombat = true;
-        }
-    }
-
     void MoveInLineOfSight(Unit *) {}
 
     void MovementInform(uint32, uint32)

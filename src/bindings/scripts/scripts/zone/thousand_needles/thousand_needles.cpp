@@ -27,84 +27,74 @@ npc_plucky
 EndContentData */
 
 #include "precompiled.h"
-#include "../../npc/npc_escortAI.h"
+#include "escort_ai.h"
 
 /*#####
 # npc_swiftmountain
 ######*/
 
-#define SAY_READY -1000147
-#define SAY_AGGRO -1000148
-#define SAY_FINISH -1000149
+enum ePacka
+{
+    SAY_START           = -1000147,
+    SAY_WYVERN          = -1000148,
+    SAY_COMPLETE        = -1000149,
 
-#define QUEST_HOMEWARD_BOUND 4770
-#define ENTRY_WYVERN 4107
+    QUEST_HOMEWARD      = 4770,
+    NPC_WYVERN          = 4107,
+    FACTION_ESCORTEE    = 232                               //guessed
+};
+
+float m_afWyvernLoc[3][3]=
+{
+    {-4990.606, -906.057, -5.343},
+    {-4970.241, -927.378, -4.951},
+    {-4985.364, -952.528, -5.199}
+};
 
 struct TRINITY_DLL_DECL npc_swiftmountainAI : public npc_escortAI
 {
-npc_swiftmountainAI(Creature *c) : npc_escortAI(c) {}
+    npc_swiftmountainAI(Creature* pCreature) : npc_escortAI(pCreature) { }
 
-    void WaypointReached(uint32 i)
+    void Reset() { }
+
+    void WaypointReached(uint32 uiPointId)
     {
-        Player* player = Unit::GetPlayer(PlayerGUID);
-
-        if (!player)
-            return;
-
-        switch (i)
+        switch(uiPointId)
         {
-        case 46:
-            DoScriptText(SAY_AGGRO, m_creature, player);
-            break;
-         case 47:
-            m_creature->SummonCreature(ENTRY_WYVERN, -5016.45, -935.01, -5.46, 5.36,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-            m_creature->SummonCreature(ENTRY_WYVERN, -5001.98, -934.96, -5.55, 3.18,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-            m_creature->SummonCreature(ENTRY_WYVERN, -4999.06, -949.61, -5.42, 2.04,TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
-            break;
-         case 70:
-            DoScriptText(SAY_FINISH, m_creature, player);
-            player->GroupEventHappens(QUEST_HOMEWARD_BOUND,m_creature);
-            break;
-
+            case 15:
+                DoScriptText(SAY_WYVERN, m_creature);
+                DoSpawnWyvern();
+                break;
+            case 26:
+                DoScriptText(SAY_COMPLETE, m_creature);
+                break;
+            case 27:
+                if (Player* pPlayer = GetPlayerForEscort())
+                    pPlayer->GroupEventHappens(QUEST_HOMEWARD, m_creature);
+                break;
         }
     }
 
-    void Reset()
+    void DoSpawnWyvern()
     {
-        m_creature->setFaction(104);
-    }
-
-    void Aggro(Unit* who){}
-
-    void JustSummoned(Creature* summoned)
-    {
-        summoned->AI()->AttackStart(m_creature);
-    }
-
-    void JustDied(Unit* killer)
-    {
-        if (PlayerGUID)
-        {
-            if (Player* player = Unit::GetPlayer(PlayerGUID))
-                player->FailQuest(QUEST_HOMEWARD_BOUND);
-        }
-    }
-
-    void UpdateAI(const uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
+        for (int i = 0; i < 3; ++i)
+            m_creature->SummonCreature(NPC_WYVERN,
+            m_afWyvernLoc[i][0], m_afWyvernLoc[i][1], m_afWyvernLoc[i][2], 0.0f,
+            TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000);
     }
 };
 
-bool QuestAccept_npc_swiftmountain(Player* player, Creature* creature, Quest const* quest)
-{
-    if (quest->GetQuestId() == QUEST_HOMEWARD_BOUND)
-    {
-        ((npc_escortAI*)(creature->AI()))->Start(true, true, false, player->GetGUID());
-        DoScriptText(SAY_READY, creature, player);
-        creature->setFaction(113);
-    }
 
+bool QuestAccept_npc_swiftmountain(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+{
+    if (pQuest->GetQuestId() == QUEST_HOMEWARD)
+    {
+        DoScriptText(SAY_START, pCreature, pPlayer);
+        pCreature->setFaction(FACTION_ESCORTEE);
+
+        if (npc_swiftmountainAI* pEscortAI = CAST_AI(npc_swiftmountainAI,pCreature->AI()))
+            pEscortAI->Start(false, false, pPlayer->GetGUID(), pQuest);
+    }
     return true;
 }
 

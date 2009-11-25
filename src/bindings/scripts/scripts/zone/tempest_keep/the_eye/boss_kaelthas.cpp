@@ -350,7 +350,7 @@ struct TRINITY_DLL_DECL boss_kaelthasAI : public ScriptedAI
         IsCastingFireball = false;
         ChainPyros = false;
 
-        if(InCombat)
+        if(m_creature->isInCombat())
             PrepareAdvisors();
 
         DeleteLegs();
@@ -1197,14 +1197,10 @@ struct TRINITY_DLL_DECL boss_grand_astromancer_capernianAI : public advisorbase_
         if (m_creature->Attack(who, true))
         {
             m_creature->AddThreat(who, 0.0f);
+            m_creature->SetInCombatWith(who);
+            who->SetInCombatWith(m_creature);
 
-            if (!InCombat)
-            {
-                InCombat = true;
-                Aggro(who);
-            }
-
-            DoStartMovement(who, CAPERNIAN_DISTANCE, M_PI/2);
+            m_creature->GetMotionMaster()->MoveChase(who, CAPERNIAN_DISTANCE);
         }
     }
 
@@ -1495,11 +1491,9 @@ struct TRINITY_DLL_DECL mob_phoenix_egg_tkAI : public ScriptedAI
     {
         if (m_creature->Attack(who, false))
         {
-            if (!InCombat)
-            {
-                InCombat = true;
-                Aggro(who);
-            }
+            m_creature->SetInCombatWith(who);
+            who->SetInCombatWith(m_creature);
+
             DoStartNoMovement(who);
         }
     }
