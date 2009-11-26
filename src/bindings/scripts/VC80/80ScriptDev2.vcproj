@@ -423,11 +423,11 @@
 				Name="npc"
 				>
 				<File
-					RelativePath="..\scripts\npc\npc_escortAI.cpp"
+					RelativePath="..\scripts\npc\escort_ai.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\scripts\npc\npc_escortAI.h"
+					RelativePath="..\scripts\npc\escort_ai.h"
 					>
 				</File>
 				<File
