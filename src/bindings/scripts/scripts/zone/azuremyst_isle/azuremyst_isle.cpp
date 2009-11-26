@@ -29,15 +29,10 @@ npc_magwin
 npc_susurrus
 npc_geezle
 mob_nestlewood_owlkin
-item_draenei_fishing_net(i23654)
-item_inoculating_crystal            Quest Inoculating. Prevent abuse
 EndContentData */
 
 #include "precompiled.h"
 #include "escort_ai.h"
-#include "SpellMgr.h"
-#include "Spell.h"
-#include "WorldPacket.h"
 #include <cmath>
 
 /*######
@@ -693,5 +688,6 @@ void AddSC_azuremyst_isle()
     newscript->Name="mob_nestlewood_owlkin";
     newscript->GetAI = &GetAI_mob_nestlewood_owlkinAI;
     newscript->RegisterSelf();
+
 }
 
