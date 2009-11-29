@@ -42,8 +42,10 @@ namespace FactorySelector
           ai_factory = ai_registry.GetRegistryItem("PetAI");
 
         //scriptname in db
-        if(CreatureAI* scriptedAI = Script->GetAI(creature))
-            return scriptedAI;
+        // Allow scripting AI for normal creatures and not controlled pets (guardians and mini-pets)
+        if((!creature->isPet() || !((Pet*)creature)->isControlled()) && !creature->isCharmed())
+            if(CreatureAI* scriptedAI = Script->GetAI(creature))
+                return scriptedAI;
 
         // AIname in db
         std::string ainame=creature->GetAIName();
