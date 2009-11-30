@@ -2875,16 +2875,21 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     int32 fullSkillDiff = attackerWeaponSkill - int32(pVictim->GetDefenseSkillValue(this));
 
     uint32 roll = GetMap()->urand (0, 10000);
-    uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell->Id)*100.0f);
-
-    // Roll miss
-    uint32 tmp = missChance;
-    if (roll < tmp)
-        return SPELL_MISS_MISS;
 
     bool canDodge = true;
     bool canParry = true;
     bool canBlock = spell->AttributesEx3 & SPELL_ATTR_EX3_UNK3;
+    //We use SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY until right Attribute was found
+    bool canMiss = !(spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY);
+
+    if(canMiss)
+    {
+        uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell->Id)*100.0f);
+        // Roll miss
+        tmp += missChance;
+        if (roll < tmp)
+            return SPELL_MISS_MISS;
+    }
 
     // Same spells cannot be parry/dodge
     if (spell->Attributes & SPELL_ATTR_IMPOSSIBLE_DODGE_PARRY_BLOCK)
