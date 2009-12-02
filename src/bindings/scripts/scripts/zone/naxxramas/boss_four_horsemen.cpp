@@ -17,7 +17,7 @@
     /* ScriptData
     SDName: Boss_Four_Horsemen
     SD%Complete: 75
-    SDComment: Lady Blaumeux, Thane Korthazz, Sir Zeliek, Baron Rivendare
+    SDComment: Lady Blaumeux, Thane Korthazz, Sir Zeliek, Baron Rivendare (this script maybe is not correct for TC1)
     SDCategory: Naxxramas
     EndScriptData */
 
@@ -62,7 +62,7 @@
             ShieldWall2 = true;
         }
 
-        void Aggro(Unit *who)
+        void EnterCombat(Unit *who)
         {
             DoScriptText(SAY_BLAU_AGGRO, m_creature);
         }
@@ -149,7 +149,7 @@
        {
        }
 
-       void Aggro(Unit *who)
+       void EnterCombat(Unit *who)
        {
            switch(rand()%3)
            {
@@ -218,7 +218,7 @@
            ShieldWall2 = true;
        }
 
-       void Aggro(Unit *who)
+       void EnterCombat(Unit *who)
        {
            DoScriptText(SAY_KORT_AGGRO, m_creature);
        }
@@ -313,7 +313,7 @@
            ShieldWall2 = true;
        }
 
-       void Aggro(Unit *who)
+       void EnterCombat(Unit *who)
        {
            DoScriptText(SAY_ZELI_AGGRO, m_creature);
        }
@@ -384,11 +384,14 @@
        newscript->GetAI = &GetAI_boss_lady_blaumeux;
        newscript->RegisterSelf();
 
+    /*
+    //Disabled to prevent "CRASH ALERT!"
+    //this boss is wrong here, only for wotlk is need it.
        newscript = new Script;
        newscript->Name = "boss_rivendare_naxx";
        newscript->GetAI = &GetAI_boss_rivendare_naxx;
        newscript->RegisterSelf();
-
+    */
        newscript = new Script;
        newscript->Name = "boss_thane_korthazz";
        newscript->GetAI = &GetAI_boss_thane_korthazz;

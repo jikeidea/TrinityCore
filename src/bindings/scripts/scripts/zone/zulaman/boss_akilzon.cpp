@@ -112,7 +112,7 @@ struct TRINITY_DLL_DECL boss_akilzonAI : public ScriptedAI
         SetWeather(WEATHER_STATE_FINE, 0.0f);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoYell(SAY_ONAGGRO, LANG_UNIVERSAL, NULL);
         DoPlaySoundToSet(m_creature, SOUND_ONAGGRO);
@@ -381,7 +381,7 @@ struct TRINITY_DLL_DECL mob_soaring_eagleAI : public ScriptedAI
         m_creature->SetUnitMovementFlags(MOVEMENTFLAG_LEVITATING);
     }
 
-    void Aggro(Unit *who) {DoZoneInCombat();}
+    void EnterCombat(Unit *who) {DoZoneInCombat();}
 
     void MoveInLineOfSight(Unit *) {}
 

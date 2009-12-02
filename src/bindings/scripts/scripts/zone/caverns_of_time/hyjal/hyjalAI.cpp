@@ -421,7 +421,7 @@ void hyjalAI::EnterEvadeMode()
     m_creature->SetLootRecipient(NULL);
 }
 
-void hyjalAI::Aggro(Unit *who)
+void hyjalAI::EnterCombat(Unit *who)
 {
     if(IsDummy)return;
     for(uint8 i = 0; i < 2; ++i)

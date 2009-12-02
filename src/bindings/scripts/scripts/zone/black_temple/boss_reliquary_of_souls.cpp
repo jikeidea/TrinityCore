@@ -107,7 +107,7 @@ struct TRINITY_DLL_DECL npc_enslaved_soulAI : public ScriptedAI
 
     void Reset() {ReliquaryGUID = 0;}
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         m_creature->CastSpell(m_creature, ENSLAVED_SOUL_PASSIVE, true);
         DoZoneInCombat();
@@ -157,7 +157,7 @@ struct TRINITY_DLL_DECL boss_reliquary_of_soulsAI : public ScriptedAI
         m_creature->RemoveAurasDueToSpell(SPELL_SUBMERGE);
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         m_creature->AddThreat(who, 10000.0f);
         DoZoneInCombat();
@@ -352,7 +352,7 @@ struct TRINITY_DLL_DECL boss_essence_of_sufferingAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoScriptText(SUFF_SAY_FREED, m_creature);
         DoZoneInCombat();
@@ -476,7 +476,7 @@ struct TRINITY_DLL_DECL boss_essence_of_desireAI : public ScriptedAI
                         m_creature->InterruptSpell(CURRENT_GENERIC_SPELL, false);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoScriptText(DESI_SAY_FREED, m_creature);
         DoZoneInCombat();
@@ -555,7 +555,7 @@ struct TRINITY_DLL_DECL boss_essence_of_angerAI : public ScriptedAI
         CheckedAggro = false;
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         switch(rand()%2)
         {

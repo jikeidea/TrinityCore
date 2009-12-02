@@ -251,12 +251,13 @@ void AddSC_go_scripts()
     newscript->Name="go_tablet_of_the_seven";
     newscript->pGOHello =           &GOHello_go_tablet_of_the_seven;
     newscript->RegisterSelf();
-
+    /*
+    //Disabled to prevent "CRASH ALERT!"
     newscript = new Script;
     newscript->Name="go_teleporter";
     newscript->pGOHello =           &GOHello_go_teleporter;
     newscript->RegisterSelf();
-
+    */
     newscript = new Script;
     newscript->Name="go_jump_a_tron";
     newscript->pGOHello =           &GOHello_go_jump_a_tron;

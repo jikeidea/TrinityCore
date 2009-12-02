@@ -44,7 +44,7 @@ struct TRINITY_DLL_DECL npc_astor_hadrenAI : public ScriptedAI
         m_creature->setFaction(68);
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
     }
 
@@ -255,7 +255,7 @@ struct TRINITY_DLL_DECL pyrewood_ambushAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit *who){}
+    void EnterCombat(Unit *who){}
 
     void JustSummoned(Creature *pSummoned)
     {

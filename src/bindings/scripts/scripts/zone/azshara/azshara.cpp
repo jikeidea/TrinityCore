@@ -49,7 +49,7 @@ struct TRINITY_DLL_DECL mobs_spitelashesAI : public ScriptedAI
         spellhit = false;
     }
 
-    void Aggro(Unit *who) { }
+    void EnterCombat(Unit *who) { }
 
     void SpellHit(Unit *Hitter, const SpellEntry *Spellkind)
     {
@@ -383,7 +383,7 @@ struct TRINITY_DLL_DECL mob_rizzle_sprysprocketAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void MovementInform(uint32 type, uint32 id)
     {
@@ -476,7 +476,7 @@ struct TRINITY_DLL_DECL mob_depth_chargeAI : public ScriptedAI
         return;
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         return;
     }

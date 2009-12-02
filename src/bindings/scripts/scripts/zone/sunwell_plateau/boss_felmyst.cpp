@@ -169,7 +169,7 @@ struct TRINITY_DLL_DECL boss_felmystAI : public ScriptedAI
             pInstance->SetData(DATA_FELMYST_EVENT, NOT_STARTED);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         m_creature->setActive(true);
         DoZoneInCombat();
@@ -561,7 +561,7 @@ struct TRINITY_DLL_DECL mob_felmyst_vaporAI : public ScriptedAI
         m_creature->SetSpeed(MOVE_RUN, 0.8);
     }
     void Reset() {}
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         DoZoneInCombat();
         //m_creature->CastSpell(m_creature, SPELL_VAPOR_FORCE, true); core bug
@@ -583,7 +583,7 @@ struct TRINITY_DLL_DECL mob_felmyst_trailAI : public ScriptedAI
         m_creature->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 0.01); // core bug
     }
     void Reset() {}
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
     void AttackStart(Unit* who) {}
     void MoveInLineOfSight(Unit* who) {}
     void UpdateAI(const uint32 diff) {}

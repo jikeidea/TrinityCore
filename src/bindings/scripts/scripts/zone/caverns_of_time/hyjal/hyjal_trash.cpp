@@ -166,7 +166,7 @@ void hyjal_trashAI::DamageTaken(Unit *done_by, uint32 &damage)
     }
 }
 
-void hyjal_trashAI::Aggro(Unit *who){}
+void hyjal_trashAI::EnterCombat(Unit *who){}
 
 void hyjal_trashAI::UpdateAI(const uint32 diff)
 {
@@ -407,7 +407,7 @@ struct mob_giant_infernalAI : public hyjal_trashAI
         imol = false;
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void WaypointReached(uint32 i)
     {
@@ -553,7 +553,7 @@ struct mob_abominationAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -654,7 +654,7 @@ struct mob_ghoulAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -773,7 +773,7 @@ struct mob_necromancerAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -865,7 +865,7 @@ struct mob_bansheeAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -960,7 +960,7 @@ struct mob_crypt_fiendAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -1046,7 +1046,7 @@ struct mob_fel_stalkerAI : public hyjal_trashAI
         }
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -1144,7 +1144,7 @@ struct mob_frost_wyrmAI : public hyjal_trashAI
         m_creature->Relocate(x,y,z,0);
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -1374,7 +1374,7 @@ struct TRINITY_DLL_DECL alliance_riflemanAI : public Scripted_NoMovementAI
         }
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
     }
 

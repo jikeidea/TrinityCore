@@ -119,7 +119,7 @@ struct TRINITY_DLL_DECL boss_grand_warlock_nethekurseAI : public ScriptedAI
         Cleave_Timer = 5000;
     }
 
-    void DoYellForPeonAggro()
+    void DoYellForPeonEnterCombat()
     {
         if (PeonEngagedCount >= 4)
             return;
@@ -204,7 +204,7 @@ struct TRINITY_DLL_DECL boss_grand_warlock_nethekurseAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         switch(rand()%3)
         {
@@ -327,7 +327,7 @@ struct TRINITY_DLL_DECL mob_fel_orc_convertAI : public ScriptedAI
         return;
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         if (pInstance)
         {
@@ -335,7 +335,7 @@ struct TRINITY_DLL_DECL mob_fel_orc_convertAI : public ScriptedAI
             {
                 Creature *pKurse = Unit::GetCreature(*m_creature,pInstance->GetData64(DATA_NETHEKURSE));
                 if (pKurse)
-                    ((boss_grand_warlock_nethekurseAI*)pKurse->AI())->DoYellForPeonAggro();
+                    ((boss_grand_warlock_nethekurseAI*)pKurse->AI())->DoYellForPeonEnterCombat();
             }
 
             if (pInstance->GetData(TYPE_NETHEKURSE) == IN_PROGRESS )
@@ -386,7 +386,7 @@ struct TRINITY_DLL_DECL mob_lesser_shadow_fissureAI : public ScriptedAI
         Stop_Timer = 30000;
     }
 
-    void Aggro(Unit* who) { }
+    void EnterCombat(Unit* who) { }
 
     void MoveInLineOfSight(Unit *who) { return; }
 

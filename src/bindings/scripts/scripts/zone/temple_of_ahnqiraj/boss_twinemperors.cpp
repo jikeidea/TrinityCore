@@ -140,7 +140,7 @@ struct TRINITY_DLL_DECL boss_twinemperorsAI : public ScriptedAI
         DoPlaySoundToSet(m_creature, IAmVeklor() ? SOUND_VL_KILL : SOUND_VN_KILL);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoZoneInCombat();
         Creature *pOtherBoss = GetOtherBoss();

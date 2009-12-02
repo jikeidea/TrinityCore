@@ -148,7 +148,7 @@ struct TRINITY_DLL_DECL boss_sacrolashAI : public ScriptedAI
             pInstance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoZoneInCombat();
 
@@ -413,7 +413,7 @@ struct TRINITY_DLL_DECL boss_alythessAI : public Scripted_NoMovementAI
             pInstance->SetData(DATA_EREDAR_TWINS_EVENT, NOT_STARTED);
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoZoneInCombat();
 
@@ -450,7 +450,7 @@ struct TRINITY_DLL_DECL boss_alythessAI : public Scripted_NoMovementAI
                 if (!InCombat)
                 {
                     DoStartNoMovement(who);
-                    Aggro(who);
+                    EnterCombat(who);
                     InCombat = true;
                 }
             }
@@ -688,7 +688,7 @@ struct TRINITY_DLL_DECL mob_shadow_imageAI : public ScriptedAI
         KillTimer = 15000;
     }
 
-    void Aggro(Unit *who){}
+    void EnterCombat(Unit *who){}
 
     void SpellHitTarget(Unit* target,const SpellEntry* spell)
     {

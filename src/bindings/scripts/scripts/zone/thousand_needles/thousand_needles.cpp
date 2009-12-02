@@ -206,7 +206,7 @@ struct TRINITY_DLL_DECL npc_pluckyAI : public ScriptedAI
        ChickenTimer = 0;
        }
 
-    void Aggro(Unit *who){}
+    void EnterCombat(Unit *who){}
 
     void TransformHuman(uint32 emoteid)
     {

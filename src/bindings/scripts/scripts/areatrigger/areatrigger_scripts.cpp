@@ -70,10 +70,12 @@ void AddSC_areatrigger_scripts()
     newscript->Name = "at_legion_teleporter";
     newscript->pAreaTrigger = &AreaTrigger_at_legion_teleporter;
     newscript->RegisterSelf();
-
+    /*
+    //Disabled to prevent "CRASH ALERT!"
     newscript = new Script;
     newscript->Name="at_test";
     newscript->pAreaTrigger = &ATtest;
     newscript->RegisterSelf();
+    */
 }
 

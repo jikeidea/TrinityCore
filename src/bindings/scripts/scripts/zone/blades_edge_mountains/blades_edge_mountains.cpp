@@ -45,7 +45,7 @@ struct TRINITY_DLL_DECL mobs_bladespire_ogreAI : public ScriptedAI
     {
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
     }
 
@@ -110,7 +110,7 @@ struct TRINITY_DLL_DECL mobs_nether_drakeAI : public ScriptedAI
         IntangiblePresence_Timer = 15000;
     }
 
-    void Aggro(Unit* who) { }
+    void EnterCombat(Unit* who) { }
 
     void SpellHit(Unit *caster, const SpellEntry *spell)
     {
@@ -270,7 +270,7 @@ struct TRINITY_DLL_DECL npc_daranelleAI : public ScriptedAI
     {
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
     }
 

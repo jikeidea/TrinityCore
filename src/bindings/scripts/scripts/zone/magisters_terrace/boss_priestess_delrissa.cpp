@@ -146,7 +146,7 @@ struct TRINITY_DLL_DECL boss_priestess_delrissaAI : public ScriptedAI
         }else error_log(ERROR_INST_DATA);
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         DoScriptText(SAY_AGGRO, m_creature);
 
@@ -391,7 +391,7 @@ struct TRINITY_DLL_DECL boss_priestess_guestAI : public ScriptedAI
         ResetThreatTimer = 5000 + rand()%15000;             // These guys like to switch targets often, and are not meant to be tanked.
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void JustDied(Unit* killer)
     {
@@ -564,7 +564,7 @@ struct TRINITY_DLL_DECL boss_kagani_nightstrikeAI : public boss_priestess_guestA
     void KilledUnit(Unit* victim);
     void JustDied(Unit* killer);
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void UpdateAI(const uint32 diff)
     {
@@ -868,7 +868,7 @@ struct TRINITY_DLL_DECL boss_warlord_salarisAI : public boss_priestess_guestAI
         boss_priestess_guestAI::Reset();
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         DoCast(m_creature, SPELL_BATTLE_SHOUT);
     }
@@ -955,7 +955,7 @@ struct TRINITY_DLL_DECL boss_warlord_salarisAI : public boss_priestess_guestAI
     void KilledUnit(Unit* victim);
     void JustDied(Unit* killer);
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
 };*/
 
@@ -1265,7 +1265,7 @@ struct TRINITY_DLL_DECL boss_zelfanAI : public boss_priestess_guestAI
 //
 //    void JustDied(Unit *Killer){}
 //
-//    void Aggro(Unit *who){}
+//    void EnterCombat(Unit *who){}
 //
 //    void UpdateAI(const uint32 diff)
 //    {

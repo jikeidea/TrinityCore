@@ -165,7 +165,7 @@ struct TRINITY_DLL_DECL boss_felblood_kaelthasAI : public ScriptedAI
             RemoveGravityLapse();                           // Remove Gravity Lapse so that players fall to ground if they kill him when in air.
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoScriptText(SAY_AGGRO, m_creature);
         if(pInstance)
@@ -478,7 +478,7 @@ struct TRINITY_DLL_DECL mob_felkael_flamestrikeAI : public ScriptedAI
         DoCast(m_creature, SPELL_FLAMESTRIKE2, true);
     }
 
-    void Aggro(Unit *who) {}
+    void EnterCombat(Unit *who) {}
     void MoveInLineOfSight(Unit *who) {}
     void UpdateAI(const uint32 diff)
     {
@@ -513,7 +513,7 @@ struct TRINITY_DLL_DECL mob_felkael_phoenixAI : public ScriptedAI
         end = false;
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void JustDied(Unit* slayer)
     {
@@ -575,7 +575,7 @@ struct TRINITY_DLL_DECL mob_felkael_phoenix_eggAI : public Scripted_NoMovementAI
     ScriptedInstance* pInstance;
     void Reset() {   HatchTimer = 15000;   }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
     void MoveInLineOfSight(Unit* who) {}
     void UpdateAI(const uint32 diff)
     {
@@ -623,7 +623,7 @@ struct TRINITY_DLL_DECL mob_arcane_sphereAI : public ScriptedAI
         DoCast(m_creature, SPELL_ARCANE_SPHERE_PASSIVE, true);
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void StalkTarget(Unit* target)
     {

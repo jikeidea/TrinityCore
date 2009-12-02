@@ -321,7 +321,7 @@ struct TRINITY_DLL_DECL boss_kalecgos_kjAI : public ScriptedAI
 
     void Reset(){}
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void FindOrbs()
     {
@@ -524,7 +524,7 @@ struct TRINITY_DLL_DECL boss_kiljaedenAI : public Scripted_NoMovementAI
         }
     }
 
-    void Aggro(Unit* who){
+    void EnterCombat(Unit* who){
         DoZoneInCombat();
         DoScriptText(SAY_KJ_EMERGE, m_creature);
     }
@@ -776,7 +776,7 @@ struct TRINITY_DLL_DECL mob_kiljaeden_controllerAI : public Scripted_NoMovementA
         Summons.Summon(summoned);
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void UpdateAI(const uint32 diff)
     {
@@ -836,7 +836,7 @@ struct TRINITY_DLL_DECL mob_hand_of_the_deceiverAI : public ScriptedAI
         summoned->SetLevel(m_creature->getLevel());
     }
 
-    void Aggro(Unit* who){
+    void EnterCombat(Unit* who){
         if(pInstance){
             pInstance->SetData(DATA_KILJAEDEN_EVENT, IN_PROGRESS);
             Creature* Control = ((Creature*)Unit::GetUnit(*m_creature, pInstance->GetData64(DATA_KILJAEDEN_CONTROLLER)));
@@ -915,7 +915,7 @@ struct TRINITY_DLL_DECL mob_felfire_portalAI : public Scripted_NoMovementAI
 
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void JustSummoned(Creature* summoned)
     {
@@ -958,7 +958,7 @@ struct TRINITY_DLL_DECL mob_volatile_felfire_fiendAI : public ScriptedAI
         LockedTarget = false;
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void DamageTaken(Unit *done_by, uint32 &damage)
     {
@@ -1007,7 +1007,7 @@ struct TRINITY_DLL_DECL mob_armageddonAI : public Scripted_NoMovementAI
         Timer = 0;
     }
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void UpdateAI(const uint32 diff)
     {
@@ -1071,7 +1071,7 @@ struct TRINITY_DLL_DECL mob_shield_orbAI : public ScriptedAI
     void Reset(){
     }
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void UpdateAI(const uint32 diff){
         if(PointReached){
@@ -1130,7 +1130,7 @@ struct TRINITY_DLL_DECL mob_sinster_reflectionAI : public ScriptedAI
         Class = 0;
     }
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void UpdateAI(const uint32 diff){
 

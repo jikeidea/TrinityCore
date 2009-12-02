@@ -52,7 +52,7 @@ struct TRINITY_DLL_DECL boss_amnennar_the_coldbringerAI : public ScriptedAI
         Spectrals = false;
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
         DoYell(SAY_0,LANG_UNIVERSAL,NULL);
         DoPlaySoundToSet(m_creature,SOUND_AGGRO);

@@ -79,7 +79,7 @@ struct TRINITY_DLL_DECL mob_aquementasAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
     {
         DoScriptText(AGGRO_YELL_AQUE, m_creature, who);
     }

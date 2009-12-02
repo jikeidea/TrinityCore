@@ -62,7 +62,7 @@ struct TRINITY_DLL_DECL boss_midnightAI : public ScriptedAI
         m_creature->SetVisibility(VISIBILITY_ON);
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void KilledUnit(Unit *victim)
     {
@@ -187,7 +187,7 @@ struct TRINITY_DLL_DECL boss_attumenAI : public ScriptedAI
         ResetTimer = 2000;
     }
 
-    void Aggro(Unit* who) {}
+    void EnterCombat(Unit* who) {}
 
     void KilledUnit(Unit *victim)
     {

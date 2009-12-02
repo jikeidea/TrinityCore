@@ -491,7 +491,7 @@ struct TRINITY_DLL_DECL npc_image_of_medivhAI : public ScriptedAI
             m_creature->RemoveCorpse();
         }
     }
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void MovementInform(uint32 type, uint32 id)
     {

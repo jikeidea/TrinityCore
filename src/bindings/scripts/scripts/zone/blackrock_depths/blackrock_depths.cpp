@@ -137,7 +137,7 @@ struct TRINITY_DLL_DECL npc_grimstoneAI : public npc_escortAI
         CanWalk = false;
     }
 
-    void Aggro(Unit *who) { }
+    void EnterCombat(Unit *who) { }
 
     void DoGate(uint32 id, uint32 state)
     {
@@ -353,7 +353,7 @@ struct TRINITY_DLL_DECL mob_phalanxAI : public ScriptedAI
         MightyBlow_Timer = 15000;
     }
 
-    void Aggro(Unit *who)
+    void EnterCombat(Unit *who)
     {
     }
 
@@ -558,7 +558,7 @@ struct TRINITY_DLL_DECL npc_dughal_stormwingAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* who) { }
+    void EnterCombat(Unit* who) { }
     void Reset() {}
 
     void JustDied(Unit* killer)
@@ -691,7 +691,7 @@ struct TRINITY_DLL_DECL npc_marshal_windsorAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
         {
         switch(rand()%3)
             {
@@ -887,7 +887,7 @@ struct TRINITY_DLL_DECL npc_marshal_reginald_windsorAI : public npc_escortAI
         }
     }
 
-    void Aggro(Unit* who)
+    void EnterCombat(Unit* who)
         {
         switch(rand()%3)
             {
@@ -1003,7 +1003,7 @@ struct TRINITY_DLL_DECL npc_tobias_seecherAI : public npc_escortAI
 {
     npc_tobias_seecherAI(Creature *c) :npc_escortAI(c) {}
 
-    void Aggro(Unit* who) { }
+    void EnterCombat(Unit* who) { }
     void Reset() {}
 
     void JustDied(Unit* killer)
@@ -1141,7 +1141,7 @@ struct TRINITY_DLL_DECL npc_rocknotAI : public npc_escortAI
         BreakDoor_Timer = 0;
     }
 
-    void Aggro(Unit *who) { }
+    void EnterCombat(Unit *who) { }
 
     void DoGo(uint32 id, uint32 state)
     {

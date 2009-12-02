@@ -82,7 +82,7 @@ struct TRINITY_DLL_DECL npc_draenei_survivorAI : public ScriptedAI
         m_creature->SetUInt32Value(UNIT_FIELD_BYTES_1, 3);
     }
 
-    void Aggro(Unit *who) {}
+    void EnterCombat(Unit *who) {}
 
     void MoveInLineOfSight(Unit *who)                       //MoveInLineOfSight is called if creature could see you, updated all 100 ms
     {
@@ -221,7 +221,7 @@ struct TRINITY_DLL_DECL npc_engineer_spark_overgrindAI : public ScriptedAI
         m_creature->setFaction(875);
     }
 
-    void Aggro(Unit *who) { }
+    void EnterCombat(Unit *who) { }
 
     void UpdateAI(const uint32 diff)
     {
@@ -293,7 +293,7 @@ struct TRINITY_DLL_DECL npc_injured_draeneiAI : public ScriptedAI
         }
     }
 
-    void Aggro(Unit *who) {}
+    void EnterCombat(Unit *who) {}
 
     void MoveInLineOfSight(Unit *who)
     {
@@ -489,7 +489,7 @@ struct TRINITY_DLL_DECL npc_geezleAI : public ScriptedAI
         StartEvent();
     }
 
-    void Aggro(Unit* who){}
+    void EnterCombat(Unit* who){}
 
     void StartEvent()
     {
@@ -613,7 +613,7 @@ struct TRINITY_DLL_DECL mob_nestlewood_owlkinAI : public ScriptedAI
         Hitted = false;
     }
 
-    void Aggro(Unit *who){}
+    void EnterCombat(Unit *who){}
 
     void SpellHit(Unit* caster, const SpellEntry* spell)
     {
