@@ -354,8 +354,9 @@ void hyjalAI::Reset()
 
     // Misc
     WaveCount = 0;
+    EnemyCount = 0;
 
-    // Set faction properly based on creature entry
+    // Set faction properly based on Creature entry
     switch(m_creature->GetEntry())
     {
         case JAINA:
