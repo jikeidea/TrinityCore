@@ -201,6 +201,14 @@ void Creature::RemoveFromWorld()
     }
 }
 
+void Creature::DisappearAndDie()
+{
+    DestroyForNearbyPlayers();
+    if(isAlive())
+        setDeathState(JUST_DIED);
+    RemoveCorpse();
+}
+
 void Creature::SearchFormation()
 {
     if(isPet())
