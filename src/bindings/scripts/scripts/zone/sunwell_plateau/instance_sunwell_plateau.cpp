@@ -212,13 +212,24 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
     {
         switch(id)
         {
-            case DATA_KALECGOS_EVENT:      Encounters[0] = data; break;
-            case DATA_BRUTALLUS_EVENT:     Encounters[1] = data; break;
+            case DATA_KALECGOS_EVENT:
+                if(Encounters[0] != DONE)
+                    Encounters[0] = data;
+                break;
+            case DATA_BRUTALLUS_EVENT:
+                if(Encounters[1] != DONE)
+                    Encounters[1] = data;
+                break;
             case DATA_FELMYST_EVENT:
                 if(data == DONE)
                     HandleGameObject(FireBarrier, OPEN);
-                Encounters[2] = data; break;
-            case DATA_EREDAR_TWINS_EVENT:  Encounters[3] = data; break;
+                if(Encounters[2] != DONE)
+                    Encounters[2] = data;
+                break;
+            case DATA_EREDAR_TWINS_EVENT:
+                if(Encounters[3] != DONE)
+                    Encounters[3] = data;
+                break;
             case DATA_MURU_EVENT:
                 switch(data){
                     case DONE:
@@ -234,8 +245,13 @@ struct TRINITY_DLL_DECL instance_sunwell_plateau : public ScriptedInstance
                         HandleGameObject(Gate[3], OPEN);
                         break;
                 }
-                Encounters[4] = data; break;
-            case DATA_KILJAEDEN_EVENT:     Encounters[5] = data; break;
+                if(Encounters[4] != DONE)
+                    Encounters[4] = data;
+                break;
+            case DATA_KILJAEDEN_EVENT:
+                if(Encounters[5] != DONE)
+                    Encounters[5] = data;
+                break;
         }
 
         if(data == DONE)

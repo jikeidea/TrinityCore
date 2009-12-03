@@ -179,25 +179,30 @@ struct TRINITY_DLL_DECL instance_blackrock_depths : public ScriptedInstance
         switch(type)
         {
         case TYPE_RING_OF_LAW:
-            Encounter[0] = data;
+            if(Encounter[0] != DONE)
+                Encounter[0] = data;
             break;
         case TYPE_VAULT:
-            Encounter[1] = data;
+            if(Encounter[1] != DONE)
+                Encounter[1] = data;
             break;
         case TYPE_BAR:
             if (data == SPECIAL)
                 ++BarAleCount;
-            else
+            else if(Encounter[2] != DONE)
                 Encounter[2] = data;
             break;
         case TYPE_TOMB_OF_SEVEN:
-            Encounter[3] = data;
+            if(Encounter[3] != DONE)
+                Encounter[3] = data;
             break;
         case TYPE_LYCEUM:
-            Encounter[4] = data;
+            if(Encounter[4] != DONE)
+                Encounter[4] = data;
             break;
         case TYPE_IRON_HALL:
-            Encounter[5] = data;
+            if(Encounter[5] != DONE)
+                Encounter[5] = data;
             break;
         }
 

@@ -66,10 +66,12 @@ struct TRINITY_DLL_DECL instance_shattered_halls : public ScriptedInstance
         switch( type )
         {
             case TYPE_NETHEKURSE:
-                Encounter[0] = data;
+                if(Encounter[0] != DONE)
+                    Encounter[0] = data;
                 break;
             case TYPE_OMROGG:
-                Encounter[1] = data;
+                if(Encounter[1] != DONE)
+                    Encounter[1] = data;
                 break;
         }
     }

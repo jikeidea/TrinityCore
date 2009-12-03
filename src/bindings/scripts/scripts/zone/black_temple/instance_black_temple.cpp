@@ -212,19 +212,25 @@ struct TRINITY_DLL_DECL instance_black_temple : public ScriptedInstance
             {
                 HandleGameObject(NajentusGate, true);
             }
-            Encounters[0] = data;break;
+            if(Encounters[0] != DONE)
+                Encounters[0] = data;
+            break;
         case DATA_SUPREMUSEVENT:
             if(data == DONE)
             {
                 HandleGameObject(NajentusGate, true);
             }
-            Encounters[1] = data; break;
+            if(Encounters[1] != DONE)
+                Encounters[1] = data;
+            break;
         case DATA_SHADEOFAKAMAEVENT:
             if(data == IN_PROGRESS)
             {
                 HandleGameObject(ShadeOfAkamaDoor, false);
             }else HandleGameObject(ShadeOfAkamaDoor, true);
-            Encounters[2] = data; break;
+            if(Encounters[2] != DONE)
+                Encounters[2] = data;
+            break;
         case DATA_TERONGOREFIENDEVENT:
             if(data == IN_PROGRESS)
             {
@@ -235,25 +241,33 @@ struct TRINITY_DLL_DECL instance_black_temple : public ScriptedInstance
                 HandleGameObject(TeronDoor, true);
                 HandleGameObject(CommonDoor, true);
             }
-            Encounters[3] = data; break;
+            if(Encounters[3] != DONE)
+                Encounters[3] = data;
+            break;
         case DATA_GURTOGGBLOODBOILEVENT:
             if(data == DONE)
             {
                 HandleGameObject(GuurtogDoor, true);
             }
-            Encounters[4] = data; break;
+            if(Encounters[4] != DONE)
+                Encounters[4] = data;
+            break;
         case DATA_RELIQUARYOFSOULSEVENT:
             if(data == DONE)
             {
                 HandleGameObject(TempleDoor, true);
             }
-            Encounters[5] = data;         break;
+            if(Encounters[5] != DONE)
+                Encounters[5] = data;
+            break;
         case DATA_MOTHERSHAHRAZEVENT:
             if(data == DONE)
             {
                 HandleGameObject(MotherDoor, true);
             }
-            Encounters[6] = data; break;
+            if(Encounters[6] != DONE)
+                Encounters[6] = data;
+            break;
         case DATA_ILLIDARICOUNCILEVENT:
             if(data == IN_PROGRESS)
             {
@@ -264,25 +278,17 @@ struct TRINITY_DLL_DECL instance_black_temple : public ScriptedInstance
                 HandleGameObject(CouncilDoor, true);
                 HandleGameObject(SimpleDoor, true);
             }
-            Encounters[7] = data; break;
-        case DATA_ILLIDANSTORMRAGEEVENT:      Encounters[8] = data;         break;
+            if(Encounters[7] != DONE)
+                Encounters[7] = data;
+            break;
+        case DATA_ILLIDANSTORMRAGEEVENT:
+            if(Encounters[8] != DONE)
+                Encounters[8] = data;
+            break;
         }
 
         if (data == DONE)
-        {
-            OUT_SAVE_INST_DATA;
-
-            std::ostringstream saveStream;
-            saveStream << Encounters[0] << " " << Encounters[1] << " "
-                << Encounters[2] << " " << Encounters[3] << " " << Encounters[4]
-            << " " << Encounters[5] << " " << Encounters[6] << " " << Encounters[7]
-            << " " << Encounters[8];
-
-            str_data = saveStream.str();
-
             SaveToDB();
-            OUT_SAVE_INST_DATA_COMPLETE;
-        }
     }
 
     uint32 GetData(uint32 type)
@@ -305,7 +311,23 @@ struct TRINITY_DLL_DECL instance_black_temple : public ScriptedInstance
 
    const char* Save()
     {
-        return str_data.c_str();
+        OUT_SAVE_INST_DATA;
+        std::ostringstream saveStream;
+
+        saveStream << Encounters[0] << " " << Encounters[1] << " "
+            << Encounters[2] << " " << Encounters[3] << " " << Encounters[4]
+        << " " << Encounters[5] << " " << Encounters[6] << " " << Encounters[7]
+        << " " << Encounters[8];
+
+        char* out = new char[saveStream.str().length() + 1];
+        strcpy(out, saveStream.str().c_str());
+        if(out)
+        {
+            OUT_SAVE_INST_DATA_COMPLETE;
+            return out;
+        }
+
+        return NULL;
     }
 
     void Load(const char* in)

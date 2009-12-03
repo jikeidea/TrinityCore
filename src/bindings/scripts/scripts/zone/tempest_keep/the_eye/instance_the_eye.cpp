@@ -108,10 +108,24 @@ struct TRINITY_DLL_DECL instance_the_eye : public ScriptedInstance
     {
         switch(type)
         {
-            case DATA_ALAREVENT:    AlarEventPhase = data;  Encounters[0] = data;           break;
-            case DATA_HIGHASTROMANCERSOLARIANEVENT: Encounters[1] = data;                   break;
-            case DATA_VOIDREAVEREVENT:  Encounters[2] = data;                               break;
-            case DATA_KAELTHASEVENT:    KaelthasEventPhase = data;  Encounters[3] = data;   break;
+            case DATA_ALAREVENT:
+                AlarEventPhase = data;
+                if(Encounters[0] != DONE)
+                    Encounters[0] = data;
+                break;
+            case DATA_HIGHASTROMANCERSOLARIANEVENT:
+                if(Encounters[1] != DONE)
+                    Encounters[1] = data;
+                break;
+            case DATA_VOIDREAVEREVENT:
+                if(Encounters[2] != DONE)
+                    Encounters[2] = data;
+                break;
+            case DATA_KAELTHASEVENT:
+                KaelthasEventPhase = data;
+                if(Encounters[3] != DONE)
+                    Encounters[3] = data;
+                break;
         }
         if(data == DONE)
             SaveToDB();

@@ -159,27 +159,58 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
     {
          switch (type)
         {
-            case DATA_ATTUMEN_EVENT:           Encounters[0]  = data; break;
+            case DATA_ATTUMEN_EVENT:
+                if(Encounters[0] != DONE)
+                    Encounters[0]  = data;
+                break;
             case DATA_MOROES_EVENT:
                 if (Encounters[1] == DONE)
                     break;
                 Encounters[1] = data;
                 break;
-            case DATA_MAIDENOFVIRTUE_EVENT:    Encounters[2]  = data; break;
-            case DATA_OPTIONAL_BOSS_EVENT:     Encounters[3]  = data; break;
-            case DATA_OPERA_EVENT:             Encounters[4]  = data; break;
-            case DATA_CURATOR_EVENT:           Encounters[5]  = data; break;
-            case DATA_SHADEOFARAN_EVENT:       Encounters[6]  = data; break;
-            case DATA_TERESTIAN_EVENT:         Encounters[7]  = data; break;
-            case DATA_NETHERSPITE_EVENT:       Encounters[8]  = data; break;
-            case DATA_CHESS_EVENT:             Encounters[9]  = data; break;
-            case DATA_MALCHEZZAR_EVENT:        Encounters[10] = data; break;
-            case DATA_NIGHTBANE_EVENT:
-                if (Encounters[11] == DONE)
-                    break;
-                Encounters[11] = data;
+            case DATA_MAIDENOFVIRTUE_EVENT:
+                if(Encounters[2] != DONE)
+                    Encounters[2]  = data;
                 break;
-            case DATA_OPERA_OZ_DEATHCOUNT:     ++OzDeathCount;        break;
+            case DATA_OPTIONAL_BOSS_EVENT:
+                if(Encounters[3] != DONE)
+                    Encounters[3]  = data;
+                break;
+            case DATA_OPERA_EVENT:
+                if(Encounters[4] != DONE)
+                    Encounters[4]  = data;
+                break;
+            case DATA_CURATOR_EVENT:
+                if(Encounters[5] != DONE)
+                    Encounters[5]  = data;
+                break;
+            case DATA_SHADEOFARAN_EVENT:
+                if(Encounters[6] != DONE)
+                    Encounters[6]  = data;
+                break;
+            case DATA_TERESTIAN_EVENT:
+                if(Encounters[7] != DONE)
+                    Encounters[7]  = data;
+                break;
+            case DATA_NETHERSPITE_EVENT:
+                if(Encounters[8] != DONE)
+                    Encounters[8]  = data;
+                break;
+            case DATA_CHESS_EVENT:
+                if(Encounters[9] != DONE)
+                    Encounters[9]  = data;
+                break;
+            case DATA_MALCHEZZAR_EVENT:
+                if(Encounters[10] != DONE)
+                    Encounters[10] = data;
+                break;
+            case DATA_NIGHTBANE_EVENT:
+                if(Encounters[11] != DONE)
+                    Encounters[11] = data;
+                break;
+            case DATA_OPERA_OZ_DEATHCOUNT:
+                ++OzDeathCount;
+                break;
         }
 
         if(data == DONE)
@@ -206,8 +237,8 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
             case 184276:   GamesmansDoor        = go->GetGUID();         break;
             case 184277:   GamesmansExitDoor    = go->GetGUID();         break;
             case 185134:   NetherspaceDoor      = go->GetGUID();         break;
-            case 184274:    MastersTerraceDoor[0] = go->GetGUID();  break;
-            case 184280:    MastersTerraceDoor[1] = go->GetGUID();  break;
+            case 184274:   MastersTerraceDoor[0] = go->GetGUID();        break;
+            case 184280:   MastersTerraceDoor[1] = go->GetGUID();        break;
         }
 
         switch(OperaEvent)

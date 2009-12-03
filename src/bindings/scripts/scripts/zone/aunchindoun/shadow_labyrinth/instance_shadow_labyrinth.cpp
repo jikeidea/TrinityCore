@@ -128,9 +128,9 @@ struct TRINITY_DLL_DECL instance_shadow_labyrinth : public ScriptedInstance
         switch(type)
         {
             case TYPE_HELLMAW:
-                Encounter[0] = data;
+                if(Encounter[0] != DONE)
+                    Encounter[0] = data;
                 break;
-
             case TYPE_OVERSEER:
                 if( data != DONE )
                     error_log("TSCR: Shadow Labyrinth: TYPE_OVERSEER did not expect other data than DONE");
@@ -151,7 +151,8 @@ struct TRINITY_DLL_DECL instance_shadow_labyrinth : public ScriptedInstance
                 {
                     HandleGameObject(RefectoryDoorGUID,0);
                 }
-                Encounter[2] = data;
+                if(Encounter[2] != DONE)
+                    Encounter[2] = data;
                 break;
 
             case DATA_GRANDMASTERVORPILEVENT:
@@ -159,11 +160,13 @@ struct TRINITY_DLL_DECL instance_shadow_labyrinth : public ScriptedInstance
                 {
                     HandleGameObject(ScreamingHallDoorGUID,0);
                 }
-                Encounter[3] = data;
+                if(Encounter[3] != DONE)
+                    Encounter[3] = data;
                 break;
 
             case DATA_MURMUREVENT:
-                Encounter[4] = data;
+                if(Encounter[4] != DONE)
+                    Encounter[4] = data;
                 break;
         }
 
@@ -172,13 +175,7 @@ struct TRINITY_DLL_DECL instance_shadow_labyrinth : public ScriptedInstance
             if (type == TYPE_OVERSEER && FelOverseerCount != 0)
                 return;
 
-            OUT_SAVE_INST_DATA;
 
-            std::ostringstream saveStream;
-            saveStream << Encounter[0] << " " << Encounter[1] << " "
-                << Encounter[2] << " " << Encounter[3] << " " << Encounter[4];
-
-            str_data = saveStream.str();
 
             SaveToDB();
             OUT_SAVE_INST_DATA_COMPLETE;
@@ -207,6 +204,20 @@ struct TRINITY_DLL_DECL instance_shadow_labyrinth : public ScriptedInstance
 
     const char* Save()
     {
+        OUT_SAVE_INST_DATA;
+        std::ostringstream saveStream;
+
+        saveStream << Encounter[0] << " " << Encounter[1] << " "
+            << Encounter[2] << " " << Encounter[3] << " " << Encounter[4];
+
+        char* out = new char[saveStream.str().length() + 1];
+        strcpy(out, saveStream.str().c_str());
+        if(out)
+        {
+            OUT_SAVE_INST_DATA_COMPLETE;
+            return out;
+        }
+
         return str_data.c_str();
     }
 
