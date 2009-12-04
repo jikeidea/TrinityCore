@@ -62,8 +62,6 @@ struct TRINITY_DLL_DECL boss_midnightAI : public ScriptedAI
         m_creature->SetVisibility(VISIBILITY_ON);
     }
 
-    void EnterCombat(Unit* who) {}
-
     void KilledUnit(Unit *victim)
     {
         if(Phase == 2)
@@ -119,6 +117,7 @@ struct TRINITY_DLL_DECL boss_midnightAI : public ScriptedAI
                             pAttumen->SetUInt64Value(UNIT_FIELD_TARGET, pAttumen->getVictim()->GetGUID());
                         }
                         pAttumen->SetFloatValue(OBJECT_FIELD_SCALE_X,1);
+                        pAttumen->SetHealth(pAttumen->GetMaxHealth());
                     }
                 } else Mount_Timer -= diff;
             }
@@ -186,8 +185,6 @@ struct TRINITY_DLL_DECL boss_attumenAI : public ScriptedAI
     {
         ResetTimer = 2000;
     }
-
-    void EnterCombat(Unit* who) {}
 
     void KilledUnit(Unit *victim)
     {
@@ -282,7 +279,7 @@ struct TRINITY_DLL_DECL boss_attumenAI : public ScriptedAI
                 if(pMidnight && pMidnight->GetTypeId() == TYPEID_UNIT)
                 {
                     ((boss_midnightAI*)(pMidnight->AI()))->Mount(m_creature);
-                    m_creature->SetHealth(pMidnight->GetHealth());
+                    m_creature->SetHealth(m_creature->GetMaxHealth());
                 }
             }
         }

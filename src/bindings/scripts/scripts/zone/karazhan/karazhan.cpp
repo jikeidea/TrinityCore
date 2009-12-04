@@ -418,8 +418,8 @@ bool GossipSelect_npc_barnes(Player* pPlayer, Creature* pCreature, uint32 uiSend
 bool GossipHello_npc_berthold(Player* player, Creature* _Creature)
 {
     ScriptedInstance* pInstance = ((ScriptedInstance*)_Creature->GetInstanceData());
-                                                            // Check if Shade of Aran is dead or not
-    if(pInstance && (pInstance->GetData(DATA_SHADEOFARAN_EVENT) >= DONE))
+     // Check if Shade of Aran is dead or not
+    if(pInstance && (pInstance->GetData(DATA_SHADEOFARAN_EVENT) == DONE))
         player->ADD_GOSSIP_ITEM(0, GOSSIP_ITEM_TELEPORT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     player->SEND_GOSSIP_MENU(_Creature->GetNpcTextId(), _Creature->GetGUID());

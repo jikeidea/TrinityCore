@@ -56,11 +56,15 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
     uint64 KilrekGUID;
     uint64 TerestianGUID;
     uint64 MoroesGUID;
+    uint64 NightBaneGUID;
+
+    uint64 SideEntranceDoor;
+    uint64 ServantsAccessDoor;                              // Door to Brocken Stair
     uint64 LibraryDoor;                                     // Door at Shade of Aran
     uint64 MassiveDoor;                                     // Door at Netherspite
     uint64 GamesmansDoor;                                   // Door before Chess
     uint64 GamesmansExitDoor;                               // Door after Chess
-    uint64 NetherspaceDoor;                                // Door at Malchezaar
+    uint64 NetherspaceDoor;                                 // Door at Malchezaar
     uint64 MastersTerraceDoor[2];
     uint64 ImageGUID;
 
@@ -72,6 +76,9 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
         OperaEvent          = urand(1,3);                   // 1 - OZ, 2 - HOOD, 3 - RAJ, this never gets altered.
         OzDeathCount    = 0;
 
+        SideEntranceDoor    = 0;
+        ServantsAccessDoor  = 0;
+
         CurtainGUID         = 0;
         StageDoorLeftGUID   = 0;
         StageDoorRightGUID  = 0;
@@ -79,6 +86,7 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
         KilrekGUID          = 0;
         TerestianGUID       = 0;
         MoroesGUID          = 0;
+        NightBaneGUID       = 0;
 
         LibraryDoor         = 0;
         MassiveDoor         = 0;
@@ -117,7 +125,7 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
             case DATA_NIGHTBANE_EVENT:        return Encounters[11];
             case DATA_OPERA_PERFORMANCE:      return OperaEvent;
             case DATA_OPERA_OZ_DEATHCOUNT:    return OzDeathCount;
-            case DATA_IMAGE_OF_MEDIVH:             return ImageGUID;
+            case DATA_IMAGE_OF_MEDIVH:        return ImageGUID;
         }
 
         return 0;
@@ -148,25 +156,26 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
             case DATA_GAMEOBJECT_GAME_DOOR:        return GamesmansDoor;
             case DATA_GAMEOBJECT_GAME_EXIT_DOOR:   return GamesmansExitDoor;
             case DATA_GAMEOBJECT_NETHER_DOOR:      return NetherspaceDoor;
+            case DATA_IMAGE_OF_MEDIVH:             return ImageGUID;
             case DATA_MASTERS_TERRACE_DOOR_1:      return MastersTerraceDoor[0];
             case DATA_MASTERS_TERRACE_DOOR_2:      return MastersTerraceDoor[1];
+            case DATA_NIGHTBANE:                   return NightBaneGUID;
         }
 
         return 0;
     }
 
-     void SetData(uint32 type, uint32 data)
+    void SetData(uint32 type, uint32 data)
     {
-         switch (type)
+        switch (type)
         {
             case DATA_ATTUMEN_EVENT:
                 if(Encounters[0] != DONE)
                     Encounters[0]  = data;
                 break;
             case DATA_MOROES_EVENT:
-                if (Encounters[1] == DONE)
-                    break;
-                Encounters[1] = data;
+                if(Encounters[1] != DONE)
+                    Encounters[1] = data;
                 break;
             case DATA_MAIDENOFVIRTUE_EVENT:
                 if(Encounters[2] != DONE)
@@ -217,18 +226,21 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
             SaveToDB();
     }
 
-     void SetData64(uint32 identifier, uint64 data)
-     {
-         switch(identifier)
-         {
-         case DATA_IMAGE_OF_MEDIVH: ImageGUID = data;
-         }
-     }
+    void SetData64(uint32 identifier, uint64 data)
+    {
+        switch(identifier)
+        {        
+            case DATA_IMAGE_OF_MEDIVH: ImageGUID = data;
+            case DATA_NIGHTBANE:       NightBaneGUID = data;
+        }
+    }
 
     void OnObjectCreate(GameObject* go)
     {
         switch(go->GetEntry())
         {
+            case 184281:   ServantsAccessDoor   = go->GetGUID();         break;
+            case 184275:   SideEntranceDoor     = go->GetGUID();         break;
             case 183932:   CurtainGUID          = go->GetGUID();         break;
             case 184278:   StageDoorLeftGUID    = go->GetGUID();         break;
             case 184279:   StageDoorRightGUID   = go->GetGUID();         break;
@@ -259,9 +271,13 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
     {
         OUT_SAVE_INST_DATA;
         std::ostringstream stream;
-        stream << Encounters[0] << " "  << Encounters[1] << " "  << Encounters[2] << " "  << Encounters[3] << " "
-            << Encounters[4] << " "  << Encounters[5] << " "  << Encounters[6] << " "  << Encounters[7] << " "
-            << Encounters[8] << " "  << Encounters[9] << " "  << Encounters[10] << " "  << Encounters[11];
+        stream << "K Z " << " "
+            << Encounters[0] << " " << Encounters[1] << " "
+            << Encounters[2] << " " << Encounters[3] << " "
+            << Encounters[4] << " " << Encounters[5] << " "
+            << Encounters[6] << " " << Encounters[7] << " "
+            << Encounters[8] << " " << Encounters[9] << " "
+            << Encounters[10] << " " << Encounters[11];
         char* out = new char[stream.str().length() + 1];
         strcpy(out, stream.str().c_str());
         if(out)
@@ -283,13 +299,20 @@ struct TRINITY_DLL_DECL instance_karazhan : public ScriptedInstance
 
         OUT_LOAD_INST_DATA(in);
         std::istringstream stream(in);
-        stream >> Encounters[0] >> Encounters[1] >> Encounters[2] >> Encounters[3]
-            >> Encounters[4] >> Encounters[5] >> Encounters[6] >> Encounters[7]
-            >> Encounters[8] >> Encounters[9] >> Encounters[10] >> Encounters[11];
-        for(uint8 i = 0; i < ENCOUNTERS; ++i)
-            if(Encounters[i] == IN_PROGRESS)                // Do not load an encounter as "In Progress" - reset it instead.
-                Encounters[i] = NOT_STARTED;
-        OUT_LOAD_INST_DATA_COMPLETE;
+        char dataHead1, dataHead2;
+        stream >> dataHead1 >> dataHead2 >>
+            Encounters[0] >> Encounters[1] >>
+            Encounters[2] >> Encounters[3] >>
+            Encounters[4] >> Encounters[5] >>
+            Encounters[6] >> Encounters[7] >>
+            Encounters[8] >> Encounters[9] >>
+            Encounters[10] >> Encounters[11]; 
+        if(dataHead1 != 'K' || dataHead2 != 'Z')
+        {
+            error_log("SD2: Karazhan corrupted save data.");
+            for(int i = 0; i < ENCOUNTERS; i++)
+                Encounters[i] = 0;
+        } else OUT_LOAD_INST_DATA_COMPLETE;
     }
 };
 

@@ -85,9 +85,9 @@ struct TRINITY_DLL_DECL boss_moroesAI : public ScriptedAI
 
     void Reset()
     {
-        Vanish_Timer = 30000;
-        Blind_Timer = 35000;
-        Gouge_Timer = 23000;
+        Vanish_Timer = 35000;
+        Blind_Timer = 40000;
+        Gouge_Timer = 35000;
         Wait_Timer = 0;
         CheckAdds_Timer = 5000;
 
@@ -95,6 +95,7 @@ struct TRINITY_DLL_DECL boss_moroesAI : public ScriptedAI
         InVanish = false;
         if(m_creature->GetHealth() > 0)
         {
+            DeSpawnAdds();
             SpawnAdds();
         }
 
@@ -267,7 +268,7 @@ struct TRINITY_DLL_DECL boss_moroesAI : public ScriptedAI
                 Creature* Temp = NULL;
                 if (AddGUID[i])
                 {
-                    Temp = Unit::GetCreature((*m_creature),AddGUID[i]);
+                    Temp = Creature::GetCreature((*m_creature),AddGUID[i]);
                     if (Temp && Temp->isAlive())
                         if (!Temp->getVictim() )
                             Temp->AI()->AttackStart(m_creature->getVictim());
@@ -283,10 +284,12 @@ struct TRINITY_DLL_DECL boss_moroesAI : public ScriptedAI
             {
                 DoCast(m_creature, SPELL_VANISH);
                 InVanish = true;
-                Vanish_Timer = 30000;
-                Wait_Timer = 5000;
+                Vanish_Timer = 35000;
+                Wait_Timer = 12000;
+                return;
             }else Vanish_Timer -= diff;
 
+            //Blind highest aggro, and attack second highest
             if (Gouge_Timer < diff)
             {
                 DoCast(m_creature->getVictim(), SPELL_GOUGE);
@@ -295,14 +298,14 @@ struct TRINITY_DLL_DECL boss_moroesAI : public ScriptedAI
 
             if (Blind_Timer < diff)
             {
-                Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0, 5, true);
+                Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 0, 25, true);
                 if (target && m_creature->IsWithinMeleeRange(target))
                     DoCast(target, SPELL_BLIND);
 
                 Blind_Timer = 40000;
             }else Blind_Timer -= diff;
         }
-
+        
         if (InVanish)
         {
             if (Wait_Timer < diff)
@@ -330,6 +333,7 @@ struct TRINITY_DLL_DECL boss_moroes_guestAI : public ScriptedAI
     ScriptedInstance* pInstance;
 
     uint64 GuestGUID[4];
+    Unit* target;
 
     boss_moroes_guestAI(Creature* c) : ScriptedAI(c)
     {
@@ -353,7 +357,7 @@ struct TRINITY_DLL_DECL boss_moroes_guestAI : public ScriptedAI
             return;
 
         GuestGUID[0] = pInstance->GetData64(DATA_MOROES);
-        Creature* Moroes = (Unit::GetCreature((*m_creature), GuestGUID[0]));
+        Creature* Moroes = Creature::GetCreature((*m_creature), GuestGUID[0]);
         if(Moroes)
         {
             for(uint8 i = 0; i < 3; ++i)
@@ -537,8 +541,7 @@ struct TRINITY_DLL_DECL boss_lady_catriona_von_indiAI : public boss_moroes_guest
 
         if(GreaterHeal_Timer < diff)
         {
-            Unit* target = SelectTarget();
-
+            target = SelectTarget();
             DoCast(target, SPELL_GREATERHEAL);
             GreaterHeal_Timer = 17000;
         }else GreaterHeal_Timer -= diff;
@@ -553,8 +556,7 @@ struct TRINITY_DLL_DECL boss_lady_catriona_von_indiAI : public boss_moroes_guest
         {
             if(rand()%2)
             {
-                Unit* target = SelectTarget();
-
+                target = SelectTarget();
                 DoCast(target, SPELL_DISPELMAGIC);
             }
             else
@@ -607,16 +609,14 @@ struct TRINITY_DLL_DECL boss_lady_keira_berrybuckAI : public boss_moroes_guestAI
 
         if(HolyLight_Timer < diff)
         {
-            Unit* target = SelectTarget();
-
+            target = SelectTarget();
             DoCast(target, SPELL_HOLYLIGHT);
             HolyLight_Timer = 10000;
         }else HolyLight_Timer -= diff;
 
         if(GreaterBless_Timer < diff)
         {
-            Unit* target = SelectTarget();
-
+            target = SelectTarget();
             DoCast(target, SPELL_GREATERBLESSOFMIGHT);
 
             GreaterBless_Timer = 50000;
@@ -624,8 +624,7 @@ struct TRINITY_DLL_DECL boss_lady_keira_berrybuckAI : public boss_moroes_guestAI
 
         if(Cleanse_Timer < diff)
         {
-            Unit* target = SelectTarget();
-
+            target = SelectTarget();
             DoCast(target, SPELL_CLEANSE);
 
             Cleanse_Timer = 10000;

@@ -361,6 +361,8 @@ extern void AddSC_razorfen_kraul();
 
 //Redridge Mountains
 //Ruins of Ahn'Qiraj
+extern void AddSC_boss_kurinnaxx();
+
 //Scarlet Monastery
 extern void AddSC_boss_arcanist_doan();
 extern void AddSC_boss_azshir_the_sleepless();
@@ -915,6 +917,8 @@ void AddScripts()
 
     //Redridge Mountains
     //Ruins of Ahn'Qiraj
+    AddSC_boss_kurinnaxx();
+
     //Scarlet Monastery
     AddSC_boss_arcanist_doan();
     AddSC_boss_azshir_the_sleepless();
