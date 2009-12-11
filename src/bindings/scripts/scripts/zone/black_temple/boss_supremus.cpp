@@ -35,6 +35,7 @@ EndScriptData */
 #define SPELL_VOLCANIC_ERUPTION     40117
 #define SPELL_VOLCANIC_SUMMON       40276
 #define SPELL_BERSERK               45078
+#define SPELL_CHARGE                41581
 
 #define CREATURE_VOLCANO            23085
 #define CREATURE_STALKER            23095
@@ -76,9 +77,7 @@ struct TRINITY_DLL_DECL boss_supremusAI : public ScriptedAI
             if(m_creature->isAlive())
             {
                 pInstance->SetData(DATA_SUPREMUSEVENT, NOT_STARTED);
-                //ToggleDoors(true);
             }
-            //else ToggleDoors(false);
         }
 
         HatefulStrikeTimer = 5000;
@@ -163,7 +162,7 @@ struct TRINITY_DLL_DECL boss_supremusAI : public ScriptedAI
         if(SummonFlameTimer < diff)
         {
             DoCast(m_creature, SPELL_MOLTEN_PUNCH);
-            SummonFlameTimer = 20000;
+            SummonFlameTimer = 10000;
         }else SummonFlameTimer -= diff;
 
         if(Phase1)
@@ -184,6 +183,9 @@ struct TRINITY_DLL_DECL boss_supremusAI : public ScriptedAI
             {
                 if(Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1, 100, true))
                 {
+                    if(m_creature->GetDistance2d(m_creature->getVictim()) < 40)
+                        m_creature->CastSpell(m_creature->getVictim(),SPELL_CHARGE,false);
+
                     DoResetThreat();
                     m_creature->AddThreat(target, 5000000.0f);
                     DoScriptText(EMOTE_NEW_TARGET, m_creature);
@@ -246,7 +248,7 @@ struct TRINITY_DLL_DECL npc_volcanoAI : public ScriptedAI
 
     void Reset()
     {
-        CheckTimer = 1500;
+        CheckTimer = 3000;
         Eruption = false;
 
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
