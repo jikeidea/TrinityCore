@@ -111,7 +111,10 @@ struct TRINITY_DLL_DECL mob_ashtongue_channelerAI : public ScriptedAI
 
     uint64 ShadeGUID;
 
-    void Reset() {}
+    void Reset() 
+    {
+        m_creature->setActive(true);
+    }
     void JustDied(Unit* killer);
     void EnterCombat(Unit* who) {}
     void AttackStart(Unit* who) {}
@@ -130,7 +133,8 @@ struct TRINITY_DLL_DECL mob_ashtongue_sorcererAI : public ScriptedAI
     void Reset()
     {
         StartBanishing = false;
-        CheckTimer = 5000;        
+        CheckTimer = 5000;
+        m_creature->setActive(true);
     }
 
     void JustDied(Unit* killer);
@@ -235,6 +239,8 @@ struct TRINITY_DLL_DECL boss_shade_of_akamaAI : public ScriptedAI
             pInstance->SetData(DATA_SHADEOFAKAMAEVENT, NOT_STARTED);
 
         reseting = false;
+
+        m_creature->setActive(true);
     }
     void JustDied(Unit* killer)
     {
@@ -331,20 +337,27 @@ struct TRINITY_DLL_DECL boss_shade_of_akamaAI : public ScriptedAI
                 ++SorcererCount;
             }
         }
-        else
+        //else
+        //{
+        for(uint8 pos = 0; pos < 2; ++pos)
         {
+            X = SpawnLocations[pos].x;
+            Y = SpawnLocations[pos].y;
+
             for(uint8 i = 0; i < 3; ++i)
             {
-                Creature* Spawn = m_creature->SummonCreature(spawnEntries[i], X, Y, Z_SPAWN, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 25000);
+                Creature* Spawn = m_creature->SummonCreature(spawnEntries[i], X, Y, Z_SPAWN, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
                 if(Spawn)
                 {
                     Spawn->RemoveUnitMovementFlag(MOVEMENTFLAG_WALK_MODE);
                     Spawn->GetMotionMaster()->MovePoint(0, AGGRO_X, AGGRO_Y, AGGRO_Z);
                     Unit* target = SelectUnit(SELECT_TARGET_RANDOM, 1);
                     Spawn->AI()->AttackStart(target);
+                    DoZoneInCombat(Spawn);
                 }
             }
         }
+        //}
     }
 
     void FindChannelers()
@@ -568,6 +581,8 @@ struct TRINITY_DLL_DECL npc_akamaAI : public ScriptedAI
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
         summons.DespawnAll();
+
+        m_creature->setActive(true);
     }
 
     void JustSummoned(Creature *summon) 
@@ -600,8 +615,6 @@ struct TRINITY_DLL_DECL npc_akamaAI : public ScriptedAI
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             ((boss_shade_of_akamaAI*)Shade->AI())->SetAkamaGUID(m_creature->GetGUID());
             ((boss_shade_of_akamaAI*)Shade->AI())->SetSelectableChannelers();
-            //((boss_shade_of_akamaAI*)Shade->AI())->InCombat = true;
-            m_creature->CombatStart(Shade);
             Shade->AddThreat(m_creature, 1000000.0f);
             Shade->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
             Shade->SetUInt64Value(UNIT_FIELD_TARGET, m_creature->GetGUID());
@@ -673,7 +686,7 @@ struct TRINITY_DLL_DECL npc_akamaAI : public ScriptedAI
                     if(CastSoulRetrieveTimer < diff)
                     {
                         DoCast(Shade, SPELL_AKAMA_SOUL_CHANNEL);
-                        CastSoulRetrieveTimer = 500;
+                        CastSoulRetrieveTimer = 60000;
                     }else CastSoulRetrieveTimer -= diff;
                 }
                 else
@@ -852,12 +865,13 @@ bool GossipSelect_npc_akama(Player *player, Creature *_Creature, uint32 sender, 
 
 bool GossipHello_npc_akama(Player *player, Creature *_Creature)
 {
-    if(player->isAlive())
+    ScriptedInstance* pInstance = ((ScriptedInstance*)_Creature->GetInstanceData());
+
+    if(pInstance && pInstance->GetData(DATA_SHADEOFAKAMAEVENT) == NOT_STARTED)
     {
         player->ADD_GOSSIP_ITEM( 0, GOSSIP_ITEM, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(907, _Creature->GetGUID());
     }
-
+    player->SEND_GOSSIP_MENU(907, _Creature->GetGUID());
     return true;
 }
 
