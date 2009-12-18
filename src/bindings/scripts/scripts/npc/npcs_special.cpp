@@ -965,21 +965,12 @@ CreatureAI* GetAI_npc_tonk_mine(Creature *_Creature)
 
 bool ReceiveEmote_npc_winter_reveler( Player *player, Creature *_Creature, uint32 emote )
 {
-    //TODO: check auralist.
-    if(player->HasAura(26218, 0))
+    if(player->HasAura(26218, 1))
         return false;
 
     if( emote == TEXTEMOTE_KISS )
-    {
-        _Creature->CastSpell(_Creature, 26218, false);
-        player->CastSpell(player, 26218, false);
-        switch(rand()%3)
-        {
-        case 0: _Creature->CastSpell(player, 26207, false); break;
-        case 1: _Creature->CastSpell(player, 26206, false); break;
-        case 2: _Creature->CastSpell(player, 45036, false); break;
-        }
-    }
+        _Creature->CastSpell(player, 26218, false);
+
     return true;
 }
 

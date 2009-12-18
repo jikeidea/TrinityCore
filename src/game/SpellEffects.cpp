@@ -4779,6 +4779,21 @@ void Spell::EffectScriptEffect(uint32 effIndex)
                 m_caster->CastSpell(unitTarget,24736,true);
         }
         break;
+        // Mistletoe
+        case 26218:
+        {
+            if(!unitTarget || !unitTarget->isAlive())
+                return;
+
+            switch((uint32)m_caster->GetMap()->rand32()%3)
+            {
+            case 0: m_caster->CastSpell(unitTarget, 26207, true); break;
+            case 1: m_caster->CastSpell(unitTarget, 26206, true); break;
+            case 2: m_caster->CastSpell(unitTarget, 45036, true); break;
+            }
+
+            break;
+        }
         // Summon Black Qiraji Battle Tank
         case 26656:
         {
