@@ -430,7 +430,7 @@ public:
             oz = player->GetOrientation();
         }
 
-        object->Relocate(object->GetPositionX(), object->GetPositionY(), object->GetPositionZ());
+        object->Relocate(object->GetPositionX(), object->GetPositionY(), object->GetPositionZ(), oz);
         object->SetWorldRotationAngles(oz, oy, ox);
         object->SaveToDB();
 
