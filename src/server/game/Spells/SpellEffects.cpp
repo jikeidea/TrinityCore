@@ -3296,18 +3296,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     unitTarget->RemoveMovementImpairingAuras();
                     break;
                 }
-                // Plant Warmaul Ogre Banner
-                case 32307:
-                    if (Player* caster = m_caster->ToPlayer())
-                    {
-                        caster->RewardPlayerAndGroupAtEvent(18388, unitTarget);
-                        if (Creature* target = unitTarget->ToCreature())
-                        {
-                            target->setDeathState(CORPSE);
-                            target->RemoveCorpse();
-                        }
-                    }
-                    break;
                 // Mug Transformation
                 case 41931:
                 {
