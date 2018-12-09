@@ -226,8 +226,8 @@ class boss_ingvar_the_plunderer : public CreatureScript
                             events.ScheduleEvent(EVENT_SMASH, urand(12, 16)*IN_MILLISECONDS, 0, PHASE_HUMAN);
                             break;
                         case EVENT_JUST_TRANSFORMED:
-                            ScheduleSecondPhase();
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
+                            ScheduleSecondPhase();
                             if (Unit* target = me->getThreatManager().getHostilTarget())
                                 AttackStart(target);
                             else
