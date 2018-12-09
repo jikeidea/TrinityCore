@@ -1,3 +1,4 @@
+/*
 -- Netherstorm -- Nethersturm
 -- ObjectiveText -- 3.3.5
 
@@ -87,3 +88,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText2`="Deaktivierter Teufelshäsch
 
 -- 10857 - Teleportiert das!
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Westlicher Teleporter zerstört", `ObjectiveText2`="Mittlerer Teleporter zerstört", `ObjectiveText3`="Östlicher Teleporter zerstört", `VerifiedBuild`=18019 WHERE `ID` = 10857 AND `locale` = "deDE";
+*/

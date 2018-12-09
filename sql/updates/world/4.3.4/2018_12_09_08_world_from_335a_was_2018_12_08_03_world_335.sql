@@ -1,3 +1,4 @@
+/*
 -- Terokkar Forest -- Wälder von Terokkar
 -- ObjectiveText -- 3.3.5
 
@@ -57,3 +58,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Oger der Gordunni", `Verifi
 
 -- 11880 - Die Multiphasen-Vermessung
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Multiphasenmessungen durchgeführt", `VerifiedBuild`=18019 WHERE `ID` = 11880 AND `locale` = "deDE";
+*/

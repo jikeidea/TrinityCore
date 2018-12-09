@@ -1,3 +1,4 @@
+/*
 --
 -- Burning Blade Toxicologist
 UPDATE `smart_scripts` SET `event_chance`=100 WHERE `entryorguid`=12319;
@@ -9,3 +10,4 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 DELETE FROM `creature_text` WHERE `CreatureID`=12319;
 INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Language`, `Probability`, `Emote`, `Duration`, `Sound`, `BroadcastTextId`, `TextRange`, `comment`) VALUES
 (12319,0,0,"You've interfered with our plans for the last time, foolish $c!",12,0,100,0,0,0,7579,0,"Burning Blade Toxicologist");
+*/

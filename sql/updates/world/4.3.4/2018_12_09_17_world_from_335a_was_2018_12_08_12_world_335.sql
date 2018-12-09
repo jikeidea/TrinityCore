@@ -1,3 +1,4 @@
+/*
 -- Nagrand -- Nagrand
 -- ObjectiveText -- 3.3.5
 
@@ -42,3 +43,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Besucht den Sonnenwindposte
 
 -- 10111 - Bringt mir das Ei!
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Versucht, das Ei zu stehlen", `VerifiedBuild`=18019 WHERE `ID` = 10111 AND `locale` = "deDE";
+*/

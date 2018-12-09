@@ -1,3 +1,4 @@
+/*
 -- Zangarmarsh -- Zangarmarschen
 -- ObjectiveText -- 3.3.5
 
@@ -12,3 +13,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Erdbinder Rayge gefunden", 
 
 -- 9816 - Habt Ihr so was schon mal gesehen?
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Murlocs in Dolchfenn freigelassen", `VerifiedBuild`=18019 WHERE `ID` = 9816 AND `locale` = "deDE";
+*/

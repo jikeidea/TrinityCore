@@ -1,3 +1,4 @@
+/*
 -- Gann Stonespire
 UPDATE `creature_template` SET `gossip_menu_id`=445, `AIName`="SmartAI" WHERE `entry`=3341;
 
@@ -13,3 +14,4 @@ INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionTex
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=445;
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorType`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
 (15,445,0,0,0,15,0,64,0,0,0,0,0,"","Show gossip option if player is a Shaman");
+*/

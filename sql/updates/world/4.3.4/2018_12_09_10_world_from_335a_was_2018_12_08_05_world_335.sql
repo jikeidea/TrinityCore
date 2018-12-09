@@ -1,3 +1,4 @@
+/*
 -- Tog Rustsprocket
 DELETE FROM `gossip_menu` WHERE `MenuID`=268 AND `TextID`=767;
 DELETE FROM `gossip_menu` WHERE `MenuID`=269;
@@ -15,3 +16,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (14,268,767,0,0,27,0,10,3,0,0,0,0,"","Show gossip text 767 if player is level 10 or higher"),
 (15,268,0,0,0,15,0,256,0,0,0,0,0,"","Show gossip option if player is a Warlock"),
 (15,268,0,0,0,27,0,10,3,0,0,0,0,"","Show gossip option if player is level 10 or higher");
+*/

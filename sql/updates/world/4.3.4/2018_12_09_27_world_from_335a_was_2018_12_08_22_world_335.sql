@@ -1,3 +1,4 @@
+/*
 -- Add some missing spawns
 SET @GUID  := 93734;  -- Innocuous Townsman
 SET @GUID1 := 93762; -- [DND] Stink Bomb Target
@@ -157,3 +158,4 @@ INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Lan
 (23971,0,2,"Matron!  Is that bad man going to eat us?",12,1,100,18,0,0,22535,0,"Traveling Orphan"),
 (23971,0,3,"If my dad were alive, he would put out the fires!",12,1,100,18,0,0,22536,0,"Traveling Orphan"),
 (23971,0,4,"If my mom were alive, she would put out the fires!",12,1,100,18,0,0,22537,0,"Traveling Orphan");
+*/

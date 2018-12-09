@@ -1,3 +1,4 @@
+/*
 --
 -- Lotwil Veriatus
 UPDATE `creature_template` SET `unit_class`=2 WHERE `entry`=2921;
@@ -40,3 +41,4 @@ INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Lan
 (2920,0,0,"%s looks over at Lotwil nervously.",16,0,100,0,0,0,959,0,"Lucien Tosselwrench"),
 (2922,2,0,"Protect master!",12,0,100,0,0,0,951,0,"Servo"),
 (2919,0,0,"%s is ripped apart as it is banished from this world.",16,0,100,0,0,0,853,0,"Fam'retor Guardian");
+*/

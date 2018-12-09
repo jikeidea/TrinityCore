@@ -1,3 +1,4 @@
+/*
 -- Curator Thorius
 DELETE FROM `creature_text` WHERE `CreatureID`=8256;
 INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Language`, `Probability`, `Emote`, `Duration`, `Sound`, `BroadcastTextId`, `TextRange`, `comment`) VALUES
@@ -36,3 +37,4 @@ INSERT INTO `waypoints` (`entry`, `pointid`, `position_x`, `position_y`, `positi
 
 UPDATE `waypoint_data` SET `action`=0 WHERE `id`=18870 AND `point`=16;
 DELETE FROM `waypoint_scripts` WHERE `id`=188702;
+*/

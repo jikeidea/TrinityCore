@@ -1,3 +1,4 @@
+/*
 -- Quest "The Grateful Dead"
 DELETE FROM `quest_details` WHERE `ID` IN (13952,14166,14167,14168,14169,14170,14171,14172,14173,14174,14175,14176,14177);
 INSERT INTO `quest_details` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `VerifiedBuild`) VALUES
@@ -46,3 +47,4 @@ INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, 
 (14175,2,0,0,0,0,0,0,0,"Ah, more delicious Bread of the Dead, thank you!$B$BPlease, take this in return... a little something fun for the holiday.",0),
 (14176,2,0,0,0,0,0,0,0,"Ah, more delicious Bread of the Dead, thank you!$B$BPlease, take this in return... a little something fun for the holiday.",0),
 (14177,2,0,0,0,0,0,0,0,"Ah, more delicious Bread of the Dead, thank you!$B$BPlease, take this in return... a little something fun for the holiday.",0);
+*/

@@ -1,3 +1,4 @@
+/*
 -- Sovik
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=980;
 INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcFlag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
@@ -19,3 +20,4 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (3412,0,0,0,19,0,100,0,2841,0,0,0,64,1,0,0,0,0,0,7,0,0,0,0,0,0,0,"Nogg - On Quest 'Rig Wars' Taken - Store Targetlist"),
 (3412,0,1,0,19,0,100,0,2841,0,0,0,100,1,0,0,0,0,0,19,3413,0,0,0,0,0,0,"Nogg - On Quest 'Rig Wars' Taken - Send Target to Sovik"),
 (3412,0,2,0,19,0,100,0,2841,0,0,0,45,1,1,0,0,0,0,19,3413,0,0,0,0,0,0,"Nogg - On Quest 'Rig Wars' Taken - Set Data to Sovik");
+*/

@@ -1,3 +1,4 @@
+/*
 -- Elder Torntusk
 UPDATE `creature_template` SET `gossip_menu_id`=6102, `AIName`="SmartAI" WHERE `entry`=14757;
 
@@ -18,3 +19,4 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (1475700,9,2,0,0,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,"Elder Torntusk - On Script - Say Line 0"),
 (1475700,9,3,0,0,0,100,0,60000,60000,0,0,90,7,0,0,0,0,0,1,0,0,0,0,0,0,0,"Elder Torntusk - On Script - Set Flag Standstate 'Dead'"),
 (1475700,9,4,0,0,0,100,0,0,0,0,0,82,1,0,0,0,0,0,1,0,0,0,0,0,0,0,"Elder Torntusk - On Script - Add Npc Flag 'Gossip'");
+*/

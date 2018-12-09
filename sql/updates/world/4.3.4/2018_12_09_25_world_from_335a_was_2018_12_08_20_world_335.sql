@@ -1,3 +1,4 @@
+/*
 -- Shadowmoon Valley -- Schattenmondtal
 -- ObjectiveText -- 3.3.5
 
@@ -69,3 +70,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Peonlager des Drachenmals v
 
 -- 11055 - Der Schuhmerang: Das Mittel gegen den wertlosen Peon
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Peon des Drachenmals diszipliniert", `VerifiedBuild`= 18019 WHERE `ID` = 11055 AND `locale` = "deDE";
+*/

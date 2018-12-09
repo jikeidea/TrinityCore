@@ -1,3 +1,4 @@
+/*
 -- Blade's Edge Mountains -- Schergrat
 -- ObjectiveText -- 3.3.5
 
@@ -93,3 +94,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Ätherrochen gebändigt", `
 
 -- 11066 - Bändigt noch mehr Ätherrochen!
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Ätherrochen gebändigt", `VerifiedBuild`=18019 WHERE `ID` = 11066 AND `locale` = "deDE";
+*/

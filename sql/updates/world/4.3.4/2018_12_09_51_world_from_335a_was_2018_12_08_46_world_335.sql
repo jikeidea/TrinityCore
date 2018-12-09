@@ -1,3 +1,4 @@
+/*
 -- Pilgrim's Bounty -- Die Pilgerfreuden
 -- ObjectiveText -- 3.3.5
 
@@ -36,3 +37,4 @@ UPDATE `quest_template_locale` SET `ObjectiveText1`="Teilen macht Freude", `Veri
 
 -- 14065 - Teilen an der Festtafel
 UPDATE `quest_template_locale` SET `ObjectiveText1`="Teilen macht Freude", `VerifiedBuild`= 28153 WHERE `ID` = 14065 AND `locale` = "deDE";
+*/
