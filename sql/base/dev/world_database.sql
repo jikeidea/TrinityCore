@@ -88,7 +88,7 @@ CREATE TABLE `achievement_reward` (
   `ItemID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `Sender` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `Subject` varchar(255) DEFAULT NULL,
-  `Text` text,
+  `Body` text,
   `MailTemplateID` mediumint(8) unsigned DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Loot System';
@@ -1758,7 +1758,7 @@ CREATE TABLE `achievement_reward_locale` (
   `ID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `Locale` varchar(4) NOT NULL,
   `Subject` text,
-  `Text` text,
+  `Body` text,
   PRIMARY KEY (`ID`,`Locale`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
