@@ -73,6 +73,8 @@ enum WarlockSpells
     SPELL_WARLOCK_SHADOW_TRANCE                     = 17941,
     SPELL_WARLOCK_SIPHON_LIFE_HEAL                  = 63106,
     SPELL_WARLOCK_SHADOW_WARD                       = 6229,
+    SPELL_WARLOCK_SOULBURN                          = 74434,
+    SPELL_WARLOCK_SOULBURN_DEMONIC_CIRCLE           = 79438,
     SPELL_WARLOCK_SOULSHATTER                       = 32835,
     SPELL_WARLOCK_SOUL_SWAP_CD_MARKER               = 94229,
     SPELL_WARLOCK_SOUL_SWAP_OVERRIDE                = 86211,
@@ -367,6 +369,11 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
         {
             PrepareAuraScript(spell_warl_demonic_circle_teleport_AuraScript);
 
+            bool Validate(SpellInfo const* /*spellInfo*/) override
+            {
+                return ValidateSpellInfo({ SPELL_WARLOCK_SOULBURN });
+            }
+
             void HandleTeleport(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 if (Player* player = GetTarget()->ToPlayer())
@@ -375,6 +382,11 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
                     {
                         player->NearTeleportTo(circle->GetPositionX(), circle->GetPositionY(), circle->GetPositionZ(), circle->GetOrientation());
                         player->RemoveMovementImpairingAuras();
+                        if (player->HasAura(SPELL_WARLOCK_SOULBURN))
+                        {
+                            player->CastSpell(player, SPELL_WARLOCK_SOULBURN_DEMONIC_CIRCLE, true);
+                            player->RemoveAurasDueToSpell(SPELL_WARLOCK_SOULBURN);
+                        }
                     }
                 }
             }
