@@ -371,7 +371,11 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
 
             bool Validate(SpellInfo const* /*spellInfo*/) override
             {
-                return ValidateSpellInfo({ SPELL_WARLOCK_SOULBURN });
+                return ValidateSpellInfo(
+                    {
+                        SPELL_WARLOCK_SOULBURN,
+                        SPELL_WARLOCK_SOULBURN_DEMONIC_CIRCLE
+                    });
             }
 
             void HandleTeleport(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
