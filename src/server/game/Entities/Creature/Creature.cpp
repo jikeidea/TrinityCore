@@ -2405,9 +2405,13 @@ bool Creature::LoadCreaturesAddon()
     SetMovementAnimKitId(cainfo->movementAnimKit);
     SetMeleeAnimKitId(cainfo->meleeAnimKit);
 
-    //Load Path
+    // Check if visibility distance different
+    if (cainfo->visibilityDistanceType != VisibilityDistanceType::Normal)
+        SetVisibilityDistanceOverride(cainfo->visibilityDistanceType);
+
+    // Load Path
     if (cainfo->path_id != 0)
-        m_path_id = cainfo->path_id;
+        _waypointPathId = cainfo->path_id;
 
     if (!cainfo->auras.empty())
     {
