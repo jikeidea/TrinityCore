@@ -1,3 +1,4 @@
+/*
 -- 
 UPDATE `gossip_menu_option` SET `OptionText`="May I have it, please.", `OptionBroadcastTextID`=8548 WHERE `MenuID` IN (85, 141, 381, 410, 411, 436,3984,4502,4512,4513,4540,4541,4542,4561,4562,4575,4576,4577,4658,4659,4676,4690,5061,6650) AND `OptionID`=4;
 
@@ -146,3 +147,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (14, 6650, 5996, 0, 0, 15, 0, 8, 0, 0, 0, 0, 0, "", "Show gossip text if player is a rogue");
 
 UPDATE `creature_template` SET `gossip_menu_id`=0, `npcflag` = `npcflag`&~1 WHERE `entry` = 4794;
+*/

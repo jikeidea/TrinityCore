@@ -1,3 +1,4 @@
+/*
 -- 
 UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry`=11936;
 DELETE FROM `smart_scripts` WHERE `entryorguid`=11936 AND `source_type`=0;
@@ -11,3 +12,4 @@ INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Lan
 (11936,0,1,"Is someone there? Tirion my old friend, is that you? have you come to save us?",12,0,100,0,0,0,7273,0,"Artist Renfray"),
 (11936,0,2,"So dark...",12,0,100,0,0,0,7272,0,"Artist Renfray"),
 (11936,0,3,"The Sarkhoff's... sometimes the Sarkhoff's visit. They are good people.",12,0,100,0,0,0,7275,0,"Artist Renfray");
+*/

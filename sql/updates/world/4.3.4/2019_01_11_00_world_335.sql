@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `game_event` WHERE `eventEntry` IN (79,80);
 INSERT INTO `game_event` (`eventEntry`,`start_time`,`end_time`,`occurence`,`length`,`holiday`,`description`,`world_event`, announce) VALUES
@@ -10,3 +11,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (10, 11010, 13759, 0, 0, 12, 0, 79, 0, 0, 1, 0, 0, "", "Raw Nightfin Snapper only when Diurnal fishing event is off"),
 (10, 11008, 13760, 0, 0, 12, 0, 80, 0, 0, 1, 0, 0, "", "Raw Sunscale Salmon only when Nocturnal fishing event is off"),
 (10, 11008, 13759, 0, 0, 12, 0, 79, 0, 0, 1, 0, 0, "", "Raw Nightfin Snapper only when Diurnal fishing event is off");
+*/

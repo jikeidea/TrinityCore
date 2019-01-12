@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `creature` WHERE `guid` IN (48306);
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`,`spawndist`, `MovementType`) VALUES
@@ -9,3 +10,4 @@ INSERT INTO `creature_template_addon` (`entry`, `bytes2`, `auras`) VALUES (11285
 
 DELETE FROM `gossip_menu` WHERE `MenuID` IN (3361);
 INSERT INTO `gossip_menu` (`MenuID`, `TextID`) VALUES (3361,4117);
+*/

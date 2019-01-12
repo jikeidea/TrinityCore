@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `reference_loot_template` WHERE `Entry` IN (11009,11105) AND `Item`=13755;
 INSERT INTO `reference_loot_template` (`Entry`, `Item`, `Reference`, `Chance`, `QuestRequired`, `LootMode`, `GroupId`, `MinCount`, `MaxCount`, `Comment`) VALUES
@@ -14,3 +15,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (10, 11105, 13756, 0, 0, 12, 0, 78, 0, 0, 0, 0, 0, "", "Raw Summer Bass during Summer seasonal fish only"),
 (10, 11009, 13755, 0, 0, 12, 0, 78, 0, 0, 1, 0, 0, "", "Winter Squid only when Summer seasonal fish is off"),
 (10, 11105, 13755, 0, 0, 12, 0, 78, 0, 0, 1, 0, 0, "", "Winter Squid only when Summer seasonal fish is off");
+*/

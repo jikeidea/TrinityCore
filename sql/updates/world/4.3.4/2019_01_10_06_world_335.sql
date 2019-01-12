@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `pool_template` WHERE entry IN (501,502,503,504,505,506);
 INSERT INTO `pool_template` (`entry`, `max_limit`, `description`) VALUES
@@ -22,3 +23,4 @@ INSERT INTO `pool_gameobject` (`guid`, `pool_entry`, `chance`, `description`) VA
 (1462, 505, 0, 'Water Barrel and Food Crate - Spawn 5'),
 (29609,506, 0, 'Water Barrel and Food Crate - Spawn 6'),
 (29306,506, 0, 'Water Barrel and Food Crate - Spawn 6');
+*/
