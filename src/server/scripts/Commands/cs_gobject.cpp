@@ -487,7 +487,11 @@ public:
         }
 
         object->Relocate(x, y, z, object->GetOrientation());
+
+        // update which cell has this gameobject registered for loading
+        sObjectMgr->RemoveGameobjectFromGrid(guidLow, object->GetGameObjectData());
         object->SaveToDB();
+        sObjectMgr->AddGameobjectToGrid(guidLow, object->GetGameObjectData());
 
         handler->PSendSysMessage(LANG_COMMAND_MOVEOBJMESSAGE, object->GetGUID().GetCounter(), object->GetGOInfo()->name.c_str(), object->GetGUID().GetCounter());
 
