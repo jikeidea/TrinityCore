@@ -2411,7 +2411,7 @@ bool Creature::LoadCreaturesAddon()
 
     // Load Path
     if (cainfo->path_id != 0)
-        _waypointPathId = cainfo->path_id;
+        m_path_id = cainfo->path_id;
 
     if (!cainfo->auras.empty())
     {
