@@ -190,6 +190,7 @@ struct boss_felblood_kaelthas : public BossAI
         summons.DespawnAll();
         events.Reset();
         me->ReleaseFocus();
+        me->SetReactState(REACT_AGGRESSIVE);
         BossAI::EnterEvadeMode(why);
     }
 
