@@ -23,12 +23,14 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`
 (96572, 17984, 530, 1, 1, 0, 0, 9336.03, -7884.33, 161.585, 6.03884, 30, 0, 0, 4120, 0, 0),
 (96573, 17984, 530, 1, 1, 0, 0, 9347.22, -7892.33, 161.811, 2.52099, 30, 0, 0, 4120, 0, 0),
 (96579, 17984, 530, 1, 1, 0, 0, 9326.99, -7894.44, 161.651, 0.84171, 30, 0, 0, 4120, 0, 0);
-  
+
 DELETE FROM `gameobject` WHERE `guid` IN (7076,7077);
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES
 (7076, 182092, 530, 1, 1, 9326.8, -7894.62, 161.72, 5.86431, 0, 0, -0.207912, 0.978148, 300, 100, 1),
 (7077, 182092, 530, 1, 1, 9347.3, -7892.57, 161.727, 0.174532, 0, 0, 0.0871553, 0.996195, 300, 100, 1);
 
 UPDATE `creature` SET `spawntimesecs`=30 WHERE `id`=17984;
-UPDATE `spell_dbc` SET `effectimplicittargeta1`=25, `rangeindex`=12 WHERE `Id` IN (34448, 34452);
+
+UPDATE `spell_dbc` SET `rangeindex`=12 WHERE `Id` IN (34448, 34452);
+UPDATE `spelleffect_dbc` SET `EffectImplicitTargetA`=25 WHERE `EffectSpellId` IN (34448, 34452);
 UPDATE `spell_scripts` SET `datalong2`=2 WHERE `Id` IN (34448, 34452);

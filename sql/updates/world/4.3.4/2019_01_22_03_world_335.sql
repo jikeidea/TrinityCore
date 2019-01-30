@@ -1,3 +1,4 @@
+/*
 -- 
 UPDATE `creature_template` SET `AIName`='SmartAI', `unit_flags`=`unit_flags`|768 WHERE `entry`=10581;
 UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry`=10539;
@@ -6,3 +7,4 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (10539,0,0,1,20,0,100,0,4821,0,0,0,41,0,0,0,0,0,0,19,10581,20,0,0,0,0,0, 'Hagar Lightninghoof - On quest rewarded - despawn npc'),
 (10539,0,1,0,61,0,100,0,0,0,0,0,12,10581,3,10000,0,0,0,8,0,0,0,-5440.1005, -2401.906, 89.2746, 4.631578, 'Hagar Lightninghoof  - On quest rewarded - summon npc'),
 (10581,0,0,0,54,0,100,0,0,0,0,0,89,5,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Young Arikara - On Just summoned - random movements');
+*/
