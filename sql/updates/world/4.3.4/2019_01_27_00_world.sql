@@ -11,9 +11,9 @@ UPDATE `creature_template` SET `ScriptName`= '', `AIName`= 'PassiveAI' WHERE `en
 
 -- Template Addons
 DELETE FROM `creature_template_addon` WHERE `entry` IN (24708, 25543);
-INSERT INTO `creature_template_addon` (`entry`, `bytes1`, `bytes2`, `auras`) VALUES
-(24708, 0, 1, '44263'),
-(25543, 0, 1, '44263');
+INSERT INTO `creature_template_addon` (`entry`, `bytes1`, `bytes2`, `emote`, `visibilityDistanceType`, `auras`) VALUES
+(24708, 0, 1, 0, 0, '44263'),
+(25543, 0, 1, 0, 0, '44263');
 
 -- Texts
 DELETE FROM `creature_text` WHERE `CreatureID`= 24664;
