@@ -28,6 +28,8 @@
 #include "ScriptedEscortAI.h"
 #include "ScriptedGossip.h"
 #include "SpellInfo.h"
+#include "SpellScript.h"
+#include "TemporarySummon.h"
 #include "Vehicle.h"
 
 /*######
