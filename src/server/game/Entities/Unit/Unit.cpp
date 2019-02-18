@@ -3272,7 +3272,7 @@ AuraApplication * Unit::_CreateAuraApplication(Aura* aura, uint8 effMask)
     // this can happen if OnEffectHitTarget() script hook killed the unit or the aura owner (which can be different)
     if (aura->IsRemoved())
     {
-        TC_LOG_ERROR("spells", "Unit::_CreateAuraApplication() called with a removed aura. Check if OnEffectHitTarget() is triggering any spell with apply aura effect (that's not allowed!)\nUnit: %s\nAura: %s", GetDebugInfo().c_str(), aura->GetDebugInfo().c_str());
+        //TC_LOG_ERROR("spells", "Unit::_CreateAuraApplication() called with a removed aura. Check if OnEffectHitTarget() is triggering any spell with apply aura effect (that's not allowed!)\nUnit: %s\nAura: %s", OutDebugInfo().c_str(), aura->OutDebugInfo().c_str());
         return nullptr;
     }
 
