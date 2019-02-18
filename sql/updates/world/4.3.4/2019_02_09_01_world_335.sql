@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `creature` WHERE `guid` IN (76265,86173,86174,97406,97407,97408,97431);
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`) VALUES
@@ -13,3 +14,4 @@ INSERT INTO `game_event_creature` (`eventEntry`, `guid`) VALUES
 (25,76265),(25,86173),(25,86174),(25,97406),(25,97407),(25,97408),(25,97431),(-25,4149),(-25,4148),(-25,4147),(-25,4155),(-25,4154),(-25,4156),(-25,4150);
 UPDATE `creature` SET `MovementType`=1, `spawndist`=4 WHERE `guid` IN(4149,4148,4147,4155,4154,4156);
 UPDATE `creature` SET `Orientation`=3.172219 WHERE `guid` IN(4152);
+*/
