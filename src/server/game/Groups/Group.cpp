@@ -832,7 +832,6 @@ void Group::Disband(bool hideDestroy /* = false */)
     RemoveMarker();
     RemoveAllMarkerFromList();
 
-    RollId.clear();
     m_memberSlots.clear();
 
     RemoveAllInvites();
