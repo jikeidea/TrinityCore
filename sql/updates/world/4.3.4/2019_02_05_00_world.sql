@@ -12,9 +12,11 @@ UPDATE `creature_addon` SET `path_id`=1257290 WHERE `guid` = 125729;
 UPDATE `creature_addon` SET `path_id`=1257500 WHERE `guid` = 125750;
 UPDATE `creature_addon` SET `path_id`=1257460 WHERE `guid` = 125746;
 
+/*
 DELETE FROM `creature_movement_override` WHERE `SpawnId` IN (125724);
 INSERT INTO `creature_movement_override` (`SpawnId`, `Ground`, `Swim`, `Flight`, `Rooted`) VALUES
 (125724, 1, 1, 2, 0);
+*/
 
 DELETE FROM `waypoint_data` WHERE `id` IN (1257240,1257290,1257500,1257460);
 INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `position_z`, `delay`, `action`, `orientation`, `action_chance`, `move_type`) VALUES
@@ -148,9 +150,11 @@ UPDATE `creature` SET `position_x` = 2504.877930, `position_y` = -5563.373047, `
 UPDATE `creature` SET `position_x` = 2488.308, `position_y` = -5584.386, `position_z` = 481.0384, `orientation` = 3.62308 WHERE `guid` = 125833;
 UPDATE `creature` SET `spawndist` = 0, `MovementType` = 2 WHERE `guid` IN (125826,125827,125828,125829,125830,125831,125832,125833);
 
+/*
 DELETE FROM `creature_template_movement` WHERE `CreatureId` IN (29239);
 INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Flight`, `Rooted`) VALUES
 (29239, 1, 1, 2, 0);
+*/
 
 DELETE FROM `creature_addon` WHERE `guid` IN (125826,125827,125828,125829,125830,125831,125832,125833);
 INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES
@@ -253,7 +257,7 @@ INSERT INTO `waypoint_data` (`id`, `point`, `position_x`, `position_y`, `positio
 (1258330,6,2468.877,-5620.938,481.0384,0,0,0,2,100),
 (1258330,7,2486.967,-5604.068,481.0384,0,0,0,2,100);
 
-DELETE FROM `waypoint_scripts` WHERE `id` IN (15); 
+DELETE FROM `waypoint_scripts` WHERE `guid` IN (7);
 INSERT INTO `waypoint_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `dataint`, `x`, `y`, `z`, `o`, `guid`) VALUES
  (15, 1, 1, 429, 1, 0, 0, 0, 0, 0, 7);
 

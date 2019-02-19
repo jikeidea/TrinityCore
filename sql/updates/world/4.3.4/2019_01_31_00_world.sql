@@ -10,6 +10,8 @@ UPDATE `creature` SET `position_x`=2338.6767, `position_y`=7337.7290, `position_
 UPDATE `creature` SET `position_x`=2323.238, `position_y`=7306.7163, `position_z`=365.6184, `orientation`=4.363535 WHERE `guid`=91793;
 UPDATE `creature` SET `position_x`=2313.559082, `position_y`=7277.915, `position_z`=369.019073, `orientation`=1.147470 WHERE `guid`=91790;
 
+/*
 DELETE FROM `creature_template_movement` WHERE `CreatureId`=23253;
 INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Flight`, `Rooted`) VALUES
 (23253, 1, 1, 1, 0);
+*/

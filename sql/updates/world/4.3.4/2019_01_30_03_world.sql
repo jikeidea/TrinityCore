@@ -1,8 +1,10 @@
 --
 DELETE FROM `creature` WHERE `id`=20061;
+/*
 DELETE FROM `creature_template_movement` WHERE `CreatureId`=20061;
 INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Flight`, `Rooted`) VALUES
 (20061, 1, 1, 0, 1);
+*/
 UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry` IN (20061); 
 DELETE FROM `smart_scripts` WHERE `entryorguid`=20061 AND `source_type`=0;
 DELETE FROM `smart_scripts` WHERE `entryorguid`=2006100 AND `source_type`=9;
