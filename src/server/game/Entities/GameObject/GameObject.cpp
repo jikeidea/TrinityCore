@@ -763,7 +763,7 @@ void GameObject::Update(uint32 diff)
                 return;
             }
 
-            SetLootState(GO_READY);
+            SetLootState(GO_NOT_READY);
 
             if (!m_respawnDelayTime)
                 return;
