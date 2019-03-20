@@ -1,3 +1,4 @@
+/*
 -- Quest "Rescue From Jaedenar"
 UPDATE `quest_template_addon` SET `SpecialFlags`=2 WHERE `ID`=5203; -- Prevents quest from auto completing
 UPDATE `gameobject_template_addon` SET `flags`=4 WHERE `entry`=176306; -- Players should not be able to open the cage
@@ -244,3 +245,4 @@ INSERT INTO `waypoints` (`entry`, `pointid`, `position_x`, `position_y`, `positi
 (11016,108,4848.7,-397.612,351.215,''),
 (11016,109,4810.83,-402.127,349.427,''),
 (11016,110,4786.06,-424.654,344.842,'');
+*/

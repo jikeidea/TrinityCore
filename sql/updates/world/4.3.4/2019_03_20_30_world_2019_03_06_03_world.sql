@@ -45,6 +45,8 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (17,0,48427,0,0,29,0,27238,40,0,1,0,'',' Foreman Kaleiki only spawns if not present'),
 (17,0,48427,0,0,29,0,27353,40,0,1,0,'',' Levine Family Termite Bunny only spawns if not present');
 
+/*
 DELETE FROM `creature_template_movement` WHERE `CreatureId`= 27352;
 INSERT INTO `creature_template_movement` (`CreatureId`,`Ground`,`Swim`,`Flight`,`Random`) VALUES
 (27352, 1, 1, 1, 2);
+*/

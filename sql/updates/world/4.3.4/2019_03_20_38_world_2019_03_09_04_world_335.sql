@@ -1,3 +1,4 @@
+/*
 -- 
 UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gKrieger!:Kriegerin!; Bereit für etwas Training?" WHERE `locale`='deDE' AND `Id`=1;
 UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gKrieger!:Kriegerin!; Bereit für etwas Training?" WHERE `locale`='deDE' AND `Id`=2;
@@ -9,3 +10,4 @@ UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gPriester!:Priesterin!; B
 UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gPriester!:Priesterin!; Bereit für etwas Training?" WHERE `locale`='deDE' AND `Id`=12; 
 UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gSchamane!:Schamanin!; Bereit für etwas Training?" WHERE `locale`='deDE' AND `Id`=14; 
 UPDATE `trainer_locale` SET `Greeting_lang` = "Hallo, $gSchamane!:Schamanin!; Bereit für etwas Training?" WHERE `locale`='deDE' AND `Id`=15; 
+*/
