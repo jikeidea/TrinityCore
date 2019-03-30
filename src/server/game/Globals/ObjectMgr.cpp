@@ -428,22 +428,100 @@ void ObjectMgr::LoadCreatureTemplates()
 {
     uint32 oldMSTime = getMSTime();
 
-    //                                               0      1                   2                   3                   4            5            6         7         8
-    QueryResult result = WorldDatabase.Query("SELECT entry, difficulty_entry_1, difficulty_entry_2, difficulty_entry_3, KillCredit1, KillCredit2, modelid1, modelid2, modelid3, "
-    //                                        9         10    11          12       13        14              15        16        17   18       19       20       21          22
-                                             "modelid4, name, femaleName, subname, IconName, gossip_menu_id, minlevel, maxlevel, exp, exp_unk, faction, npcflag, speed_walk, speed_run, "
-    //                                        23      24     25         26              27               28            29             30          31          32
-                                             "scale, `rank`, dmgschool, BaseAttackTime, RangeAttackTime, BaseVariance, RangeVariance, unit_class, unit_flags, unit_flags2, "
-    //                                        33            34      35            36             37            38
-                                             "dynamicflags, family, trainer_type, trainer_class, trainer_race, type, "
-    //                                        39          40           41      42              43        44           45           46           47           48           49
-                                             "type_flags, type_flags2, lootid, pickpocketloot, skinloot, resistance1, resistance2, resistance3, resistance4, resistance5, resistance6, "
-    //                                        50      51      52      53      54      55      56      57      58              59         60       61       62      63
-                                             "spell1, spell2, spell3, spell4, spell5, spell6, spell7, spell8, PetSpellDataId, VehicleId, mingold, maxgold, AIName, MovementType, "
-    //                                        64           65           66              67                   68            69                 70             71              72
-                                             "InhabitType, HoverHeight, HealthModifier, HealthModifierExtra, ManaModifier, ManaModifierExtra, ArmorModifier, DamageModifier, ExperienceModifier, "
-    //                                        73            74          75           76                    77                        78           79
-                                             "RacialLeader, movementId, RegenHealth, mechanic_immune_mask, spell_school_immune_mask, flags_extra, ScriptName FROM creature_template");
+    // Steps to update the counter below without doing it 1 by 1 manually
+    // 1. Using Notepad++ copy the query from "SELECT" to last field
+    // 2. Run this regex
+    //  a.find 	"\r\n[ ]+\/\/[ ]+[0-9]+
+    //  b.replace "\/\/
+    // 3. Alt + Left Click and vertical select all columns enough on the right of the file to be after // in all lines
+    // 4. Select "Edit" in the menu and then "Column Editor.."
+    // 5. Select "Number to Insert", Initial number 1, Increase by 1
+    // 6. Run this regex
+    //  a.find	"\/\/[ ]+
+    //  b.replace "\r\n\t\t\/\/
+
+    QueryResult result = WorldDatabase.Query(
+        "SELECT entry,"
+        "difficulty_entry_1,"
+        "difficulty_entry_2,"
+        "difficulty_entry_3,"
+        "KillCredit1,"
+        "KillCredit2,"
+        "modelid1,"
+        "modelid2,"
+        "modelid3,"
+        "modelid4,"
+        "name,"
+        "femaleName,"
+        "subname,"
+        "IconName,"
+        "gossip_menu_id,"
+        "minlevel,"
+        "maxlevel,"
+        "exp,"
+        "exp_unk,"
+        "faction,"
+        "npcflag,"
+        "speed_walk,"
+        "speed_run,"
+        "scale,"
+        "`rank`,"
+        "dmgschool,"
+        "BaseAttackTime,"
+        "RangeAttackTime,"
+        "BaseVariance,"
+        "RangeVariance,"
+        "unit_class,"
+        "unit_flags,"
+        "unit_flags2,"
+        "dynamicflags,"
+        "family,"
+        "trainer_type,"
+        "trainer_class,"
+        "trainer_race,"
+        "type,"
+        "type_flags,"
+        "type_flags2,"
+        "lootid,"
+        "pickpocketloot,"
+        "skinloot,"
+        "resistance1,"
+        "resistance2,"
+        "resistance3,"
+        "resistance4,"
+        "resistance5,"
+        "resistance6,"
+        "spell1,"
+        "spell2,"
+        "spell3,"
+        "spell4,"
+        "spell5,"
+        "spell6,"
+        "spell7,"
+        "spell8,"
+        "PetSpellDataId,"
+        "VehicleId,"
+        "mingold,"
+        "maxgold,"
+        "AIName,"
+        "MovementType,"
+        "InhabitType,"
+        "HoverHeight,"
+        "HealthModifier,"
+        "HealthModifierExtra,"
+        "ManaModifier,"
+        "ManaModifierExtra,"
+        "ArmorModifier,"
+        "DamageModifier,"
+        "ExperienceModifier,"
+        "RacialLeader,"
+        "movementId,"
+        "RegenHealth,"
+        "mechanic_immune_mask,"
+        "spell_school_immune_mask,"
+        "flags_extra,"
+        "ScriptName"
+        " FROM creature_template");
 
     if (!result)
     {
