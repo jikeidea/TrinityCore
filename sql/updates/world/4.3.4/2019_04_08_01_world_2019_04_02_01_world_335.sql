@@ -1,3 +1,4 @@
+/*
 -- 
 SET @ENTRY := 177491;
 UPDATE `gameobject_template` SET `AIName`='SmartGameObjectAI' WHERE `entry`=@ENTRY;
@@ -46,3 +47,4 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 DELETE FROM `creature_template_movement` WHERE `CreatureId`= 12120;
 INSERT INTO `creature_template_movement` (`CreatureId`,`Ground`,`Swim`,`Flight`,`Random`) VALUES
 (12120, 1, 1, 0, 2);
+*/

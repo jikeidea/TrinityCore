@@ -1,3 +1,4 @@
+/*
 -- 
 DELETE FROM `creature` WHERE `guid` IN (61694, 61695, 61696, 61697);
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `unit_flags`,`spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`) VALUES
@@ -12,3 +13,4 @@ INSERT INTO `creature_addon` (`guid`, `bytes2`, `path_id`, `bytes1`) VALUES
 (61695, 1, 0, 1),
 (61696, 1, 0, 1),
 (61697, 1, 0, 1);
+*/
