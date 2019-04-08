@@ -3683,6 +3683,7 @@ CREATE TABLE `spelleffect_dbc` (
   `EffectImplicitTargetB` int(10) unsigned NOT NULL DEFAULT '0',
   `EffectSpellId` int(10) unsigned NOT NULL,
   `EffectIndex` int(10) unsigned NOT NULL,
+  `Comment` TEXT NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
