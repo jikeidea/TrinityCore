@@ -94,6 +94,9 @@ public:
         if (!guidLow)
             return false;
 
+        Player const* const player = handler->GetSession()->GetPlayer();
+        // force respawn to make sure we find something
+        player->GetMap()->RemoveRespawnTime(SPAWN_TYPE_GAMEOBJECT, guidLow, true);
         GameObject* object = handler->GetObjectFromPlayerMapByDbGuid(guidLow);
         if (!object)
         {
