@@ -19,6 +19,7 @@
 #ifndef GruntRealmList_h__
 #define GruntRealmList_h__
 
+#include "DeadlineTimer.h"
 #include "Define.h"
 #include "Realm.h"
 #include <map>
@@ -67,7 +68,7 @@ class GruntRealmList
 
         RealmMap _realms;
         uint32 _updateInterval;
-        std::unique_ptr<boost::asio::deadline_timer> _updateTimer;
+        std::unique_ptr<Trinity::Asio::DeadlineTimer> _updateTimer;
         std::unique_ptr<boost::asio::ip::tcp_resolver> _resolver;
 };
 
