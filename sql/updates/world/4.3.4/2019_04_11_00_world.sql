@@ -1,4 +1,4 @@
----
+--
 DELETE FROM `spell_linked_spell` WHERE `spell_effect` = 71037;
 
 UPDATE `creature_template` SET `lootid`=67 WHERE `entry`=67;
