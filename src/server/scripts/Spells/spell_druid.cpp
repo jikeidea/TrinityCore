@@ -65,7 +65,8 @@ enum DruidSpells
     SPELL_DRUID_STAMPEDE_BEAR_RANK_1        = 81016,
     SPELL_DRUID_STAMPEDE_CAT_RANK_1         = 81021,
     SPELL_DRUID_STAMPEDE_CAT_STATE          = 109881,
-    SPELL_DRUID_TIGER_S_FURY_ENERGIZE       = 51178
+    SPELL_DRUID_TIGER_S_FURY_ENERGIZE       = 51178,
+    SPELL_ICON_ID_SAVAGE_DEFENDER           = 146
 };
 
 enum MiscSpells
@@ -90,7 +91,7 @@ class spell_dru_berserk : public AuraScript
 
     void Register() override
     {
-        AfterEffectApply += AuraEffectApplyFn(spell_dru_berserk::HandleEffectApply, EFFECT_1, SPELL_AURA_ADD_FLAT_MODIFIER, AURA_EFFECT_HANDLE_REAL);
+        AfterEffectApply += AuraEffectApplyFn(spell_dru_berserk::HandleEffectApply, EFFECT_1, SPELL_AURA_ADD_PCT_MODIFIER, AURA_EFFECT_HANDLE_REAL);
     }
 };
 
@@ -785,53 +786,27 @@ class spell_dru_rip : public SpellScriptLoader
 };
 
 // 62606 - Savage Defense
-class spell_dru_savage_defense : public SpellScriptLoader
+class spell_dru_savage_defense : public AuraScript
 {
-    public:
-        spell_dru_savage_defense() : SpellScriptLoader("spell_dru_savage_defense") { }
+    PrepareAuraScript(spell_dru_savage_defense);
 
-        class spell_dru_savage_defense_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_dru_savage_defense_AuraScript);
+    void HandleProc(AuraEffect const* aurEff, ProcEventInfo& /*eventInfo*/)
+    {
+        PreventDefaultAction();
+        Unit* target = GetTarget();
 
-        public:
-            spell_dru_savage_defense_AuraScript()
-            {
-                absorbPct = 0;
-            }
+        uint32 absorbPct = GetSpellInfo()->Effects[EFFECT_0].CalcValue(target);
+        if (AuraEffect* masteryAurEff = target->GetDummyAuraEffect(SPELLFAMILY_HUNTER, SPELL_ICON_ID_SAVAGE_DEFENDER, EFFECT_0)) // no idea why hunter...
+            absorbPct += masteryAurEff->GetAmount();
 
-        private:
-            uint32 absorbPct;
+        int32 amount = uint32(CalculatePct(GetTarget()->GetTotalAttackPowerValue(BASE_ATTACK), absorbPct));
+        target->CastCustomSpell(GetSpellInfo()->Effects[aurEff->GetEffIndex()].TriggerSpell, SPELLVALUE_BASE_POINT0, amount, target, true);
+    }
 
-            bool Load() override
-            {
-                absorbPct = GetSpellInfo()->Effects[EFFECT_0].CalcValue(GetCaster());
-                return true;
-            }
-
-            void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
-            {
-                // Set absorbtion amount to unlimited
-                amount = -1;
-            }
-
-            void Absorb(AuraEffect* aurEff, DamageInfo & /*dmgInfo*/, uint32 & absorbAmount)
-            {
-                absorbAmount = uint32(CalculatePct(GetTarget()->GetTotalAttackPowerValue(BASE_ATTACK), absorbPct));
-                aurEff->SetAmount(0);
-            }
-
-            void Register() override
-            {
-                 DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_dru_savage_defense_AuraScript::CalculateAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-                 OnEffectAbsorb += AuraEffectAbsorbFn(spell_dru_savage_defense_AuraScript::Absorb, EFFECT_0);
-            }
-        };
-
-        AuraScript* GetAuraScript() const override
-        {
-            return new spell_dru_savage_defense_AuraScript();
-        }
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_dru_savage_defense::HandleProc, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+    }
 };
 
 // 52610 - Savage Roar
@@ -1351,7 +1326,7 @@ void AddSC_druid_spell_scripts()
     new spell_dru_living_seed_proc();
     new spell_dru_predatory_strikes();
     new spell_dru_rip();
-    new spell_dru_savage_defense();
+    RegisterAuraScript(spell_dru_savage_defense);
     new spell_dru_savage_roar();
     new spell_dru_starfall_dummy();
     new spell_dru_stampede();
