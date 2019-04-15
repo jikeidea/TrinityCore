@@ -21,6 +21,7 @@
 
 #include "Common.h"
 #include "DBStorageIterator.h"
+#include "Errors.h"
 #include <vector>
 
  /// Interface class for common access
