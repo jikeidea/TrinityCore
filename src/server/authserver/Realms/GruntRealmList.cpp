@@ -43,7 +43,7 @@ GruntRealmList* GruntRealmList::Instance()
 void GruntRealmList::Initialize(Trinity::Asio::IoContext& ioContext, uint32 updateInterval)
 {
     _updateInterval = updateInterval;
-    _updateTimer = Trinity::make_unique<Trinity::Asio::DeadlineTimer>(ioContext);
+    _updateTimer = Trinity::make_unique<boost::asio::deadline_timer>(ioContext);
     _resolver = Trinity::make_unique<boost::asio::ip::tcp_resolver>(ioContext);
 
     // Get the content of the realmlist table in the database
