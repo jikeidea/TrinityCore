@@ -19,7 +19,6 @@
 #ifndef GruntRealmList_h__
 #define GruntRealmList_h__
 
-#include "DeadlineTimer.h"
 #include "Define.h"
 #include "Realm.h"
 #include <map>
@@ -39,6 +38,7 @@ namespace Trinity
     namespace Asio
     {
         class IoContext;
+        class DeadlineTimer;
     }
 }
 
