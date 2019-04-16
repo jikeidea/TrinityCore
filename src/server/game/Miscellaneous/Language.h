@@ -219,7 +219,7 @@ enum TrinityStrings
     LANG_PHASESHIFT_UI_WORLD_MAP_AREA_SWAPS = 182,
     LANG_PHASE_FLAG_COSMETIC            = 183,
     LANG_PHASE_FLAG_PERSONAL            = 184,
-    //                                    185 not used
+    //                                    185 used on 6.x and higher
     LANG_TRANSPORT_POSITION             = 186,
     LANG_PARTIAL_GROUP_SUMMON           = 187,
     // Room for more level 1              188-199 not used
