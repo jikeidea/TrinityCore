@@ -3544,8 +3544,7 @@ void Guild::_BroadcastEvent(GuildEvents guildEvent, ObjectGuid guid, char const*
 
     BroadcastPacket(&data);
 
-    if (sLog->ShouldLog("guild", LOG_LEVEL_DEBUG))
-        TC_LOG_DEBUG("guild", "SMSG_GUILD_EVENT [Broadcast] Event: %s (%u)", _GetGuildEventString(guildEvent).c_str(), guildEvent);
+    TC_LOG_DEBUG("guild", "SMSG_GUILD_EVENT [Broadcast] Event: %s (%u)", _GetGuildEventString(guildEvent).c_str(), guildEvent);
 }
 
 void Guild::SendBankList(WorldSession* session, uint8 tabId, bool withContent, bool withTabInfo) const

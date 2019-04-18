@@ -130,8 +130,6 @@ void WorldSession::SendTrainerList(ObjectGuid guid, uint32 index)
 
 void WorldSession::SendTrainerList(ObjectGuid guid, const std::string& strTitle, uint32 index)
 {
-    TC_LOG_DEBUG("network", "WORLD: SendTrainerList");
-
     Creature* trainer = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_TRAINER);
     if (!trainer)
     {
