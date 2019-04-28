@@ -1133,6 +1133,7 @@ class TC_GAME_API ObjectMgr
         void LoadGraveyardOrientations();
         void LoadCreatureTemplates();
         void LoadCreatureTemplateAddons();
+        void LoadCreatureSparringTemplate();
         void LoadCreatureTemplate(Field* fields);
         void CheckCreatureTemplate(CreatureTemplate const* cInfo);
         void LoadGameObjectQuestItems();
@@ -1405,6 +1406,17 @@ class TC_GAME_API ObjectMgr
             return &itr->second;
         }
 
+        float GetSparringHealthLimitFor(uint32 entry) const
+        {
+            auto itr = _creatureSparringTemplateStore.find(entry);
+            if (itr != _creatureSparringTemplateStore.end())
+            {
+                return itr->second;
+            }
+
+            return 0.0f;
+        }
+
         TrinityString const* GetTrinityString(uint32 entry) const
         {
             TrinityStringContainer::const_iterator itr = _trinityStringStore.find(entry);
@@ -1675,6 +1687,7 @@ class TC_GAME_API ObjectMgr
         CreatureModelContainer _creatureModelStore;
         CreatureAddonContainer _creatureAddonStore;
         CreatureTemplateAddonContainer _creatureTemplateAddonStore;
+        CreatureSparringTemplateMap _creatureSparringTemplateStore;
         GameObjectAddonContainer _gameObjectAddonStore;
         GameObjectQuestItemMap _gameObjectQuestItemStore;
         CreatureQuestItemMap _creatureQuestItemStore;
