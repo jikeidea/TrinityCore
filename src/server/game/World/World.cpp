@@ -1836,7 +1836,7 @@ void World::SetInitialWorldSettings()
     TC_LOG_INFO("server.loading", "Loading Creature Quest Items...");
     sObjectMgr->LoadCreatureQuestItems();
 
-	TC_LOG_INFO("server.loading", "Loading Creature Sparring Data...");
+    TC_LOG_INFO("server.loading", "Loading Creature Sparring Data...");
     sObjectMgr->LoadCreatureSparringTemplate();
 	
     TC_LOG_INFO("server.loading", "Loading Creature Linked Respawn...");
